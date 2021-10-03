@@ -22,10 +22,12 @@ clientMQTT.on('message', async function (topic, payload) {
 
     if (topic == suscriber.request) {
         player.changeStreaming('pruebacambio','https://youtu.be/ifkYKxL3XBc',0.5)
+
     }else if (topic == suscriber.channel) {
         let titleStreaming = message.streaming
         let urlStreaming = message.urlStreaming
         player.changeStreaming(titleStreaming,urlStreaming)
+        
     }else if (topic == suscriber.restart){
         console.log(`ll`);
     }

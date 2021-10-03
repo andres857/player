@@ -1,6 +1,6 @@
 const PlayerController = require('media-player-controller');
 const {streaming} = require('../streaming')
-const {response} = require('../broker/publication')
+const {response,successChangeChannel} = require('../broker/publication')
 
 var player = new PlayerController({
     app: 'vlc',
@@ -12,9 +12,9 @@ var player = new PlayerController({
 player.on('playback', console.log);
 
 // Playback started and player can now be controlled
-player.on('playback-started', async () => {
-    console.log('Playback started. Player can now be controlled ko');
-    response('player/1f2899/response',`canal cambiado a streamingName`)
+player.on('playback-started', () => {
+    console.log('Playback started. Player can now be controlled');
+    successChangeChannel(`Cambio de canal exitoso`)
 });
 
 player.on('app-exit', (code) => {
