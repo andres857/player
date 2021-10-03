@@ -1,6 +1,5 @@
 require('dotenv').config()
 
-
 streaming = {
     wchannel : {
       url: process.env.URL_STREAMING_INSTITUCIONAL,
@@ -15,7 +14,6 @@ streaming = {
       channel:''
     } 
   }
-
 
 module.exports = {
     streaming

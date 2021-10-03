@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^10.0.0",
-    "media-player-controller": "^1.5.3"
+    "media-player-controller": "^1.5.3",
+    "mqtt": "^4.2.8",
+    "systeminformation": "^5.9.4"
   }
 }
