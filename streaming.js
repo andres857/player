@@ -15,6 +15,11 @@ streaming = {
     } 
   }
 
+function getCurrentStreaming(streaming){
+  return streaming
+}
+
 module.exports = {
-    streaming
+    streaming,
+    getCurrentStreaming,    
 }

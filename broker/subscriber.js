@@ -1,10 +1,10 @@
 const {clientMQTT} = require ('./index')
 const {buildTopics} = require('./topics')
-const player = require('../player/mediaplayer')
+const {newStreaming,changeVolume} = require('../player/mediaplayer')
 
+// susbcriber to all topics
 async function subscriber(){
     const topics = await buildTopics()
-    
     for (let topic in topics.suscriber) {
         clientMQTT.subscribe(topics.suscriber[topic], function (err) {
             if (!err) {
@@ -14,6 +14,7 @@ async function subscriber(){
     }
 }
 
+// event listen messages from broker
 clientMQTT.on('message', async function (topic, payload) {
     let message = JSON.parse(payload)
     let {suscriber} = await buildTopics()
@@ -21,24 +22,28 @@ clientMQTT.on('message', async function (topic, payload) {
     console.log(message)
 
     if (topic == suscriber.request) {
-        player.changeStreaming('pruebacambio','https://youtu.be/ifkYKxL3XBc',0.5)
-
-    }else if (topic == suscriber.channel) {
         let titleStreaming = message.streaming
         let urlStreaming = message.urlStreaming
         player.changeStreaming(titleStreaming,urlStreaming)
         
+    }else if (topic == suscriber.channel) {
+        let titleStreaming = message.streaming
+        let urlStreaming = message.urlStreaming
+        // let volume = message.volume
+        newStreaming(titleStreaming,urlStreaming,1,()=>{
+            setTimeout(() => {
+            changeVolume(1,function(){
+                console.log(`Cambiando volumen desde la funcion`);
+            })
+            
+            }, 10000);
+        })        
     }else if (topic == suscriber.restart){
         console.log(`ll`);
     }
-    //   clientMQTT.end()
 })
-// { 
-//     "streaming" : "caracol" ,
-//     "urlStreaming":"https://youtu.be/ifkYKxL3XBc",
-//     "volume": 0.3
-// }
 
+//{ "streaming" : "caracol" ,"urlStreaming":"http://192.168.0.8/comercial.m3u8","volume": 0.3}
 // subscriber()
 
 module.exports={

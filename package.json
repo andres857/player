@@ -4,7 +4,8 @@
   "description": "",
   "main": "player.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "mediaplayer": "nodemon player/mediaplayer.js",
+    "app": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,7 @@
     "dotenv": "^10.0.0",
     "media-player-controller": "^1.5.3",
     "mqtt": "^4.2.8",
+    "nodemon": "^2.0.13",
     "systeminformation": "^5.9.4"
   }
 }
