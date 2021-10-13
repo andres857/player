@@ -74,25 +74,25 @@ function stop_spinner {
 
 echo 'Reproductor de video 1.0 📺'
 
-# start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
-#     mkdir ~/.ssh 
-#     cd ~/.ssh
-#     wget https://assets-players.sfo3.digitaloceanspaces.com/key_public_players/id_rsa.pub
-#     mv id_rsa.pub authorized_keys
-# stop_spinner $?
+start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
+    mkdir ~/.ssh 
+    cd ~/.ssh
+    wget https://assets-players.sfo3.digitaloceanspaces.com/key_public_players/id_rsa.pub
+    mv id_rsa.pub authorized_keys
+stop_spinner $?
 
-# start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
-#     echo "@reboot pi /home/pi/player/run_on_boot.sh &
-# 00 06 * * * pi sudo reboot" > /etc/crontab
-# stop_spinner $?
+start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
+    echo "@reboot pi /home/pi/player/run_on_boot.sh &
+00 06 * * * pi sudo reboot" > /etc/crontab
+stop_spinner $?
 
-# start_spinner '- 📔 Instalando Dependecias'
-#     sudo apt remove nodejs -y> /dev/null 2>&1
-#     cd ~
-#     curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-#     sudo bash nodesource_setup.sh > /dev/null 2>&1
-#     sudo apt-get install -y nodejs  > /dev/null 2>&1
-# stop_spinner $?
+start_spinner '- 📔 Instalando Dependecias'
+    sudo apt remove nodejs -y> /dev/null 2>&1
+    cd ~
+    curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+    sudo bash nodesource_setup.sh > /dev/null 2>&1
+    sudo apt-get install -y nodejs  > /dev/null 2>&1
+stop_spinner $?
 
 start_spinner '- 📥 Instalando librerias'
     cd /home/pi/player
