@@ -1,3 +1,5 @@
+require('dotenv').config({ path: '~/player/.env'})
+
 const PlayerController = require('media-player-controller');
 const { streaming, getCurrentStreaming } = require('../streaming')
 const {successChangeChannel} = require('../broker/publication')
@@ -50,7 +52,6 @@ function changeVolume(volume,cb){
 //Se definen los parametros del player, url, volumen etc
 function launch(){
     player.launch(function(){
-        //function get current channel or play channel institucional
         let channel = streaming.wchannel.channel
         let streamingUrl = streaming.wchannel.url 
         newStreaming(channel,streamingUrl,1,()=>{
