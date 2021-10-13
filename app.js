@@ -1,6 +1,5 @@
 #!/usr/bin/node
 const {launch} = require('./player/mediaplayer')
-// const {clientMQTT} = require('./broker/index')
 const {subscriber} = require('./broker/subscriber')
 
 async function main(){
