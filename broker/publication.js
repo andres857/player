@@ -7,8 +7,8 @@ function response(topic,message){
 
 async function successChangeChannel(channel){
     let topics = await buildTopics()
-    console.log(topics.publish.response);
     clientMQTT.publish(topics.publish.response,channel)
+    console.log(`publicando en ${topics.publish.response} el canal : ${channel}`);
 }
 
 module.exports = {

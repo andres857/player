@@ -1,6 +1,7 @@
 const {clientMQTT} = require ('./index')
 const {buildTopics} = require('./topics')
-const {newStreaming,changeVolume} = require('../player/mediaplayer')
+const {newStreaming,updateStreaming} = require('../player/mediaplayer')
+const {streaming} = require('../streaming')
 
 // susbcriber to all topics
 async function subscriber(){
@@ -31,12 +32,7 @@ clientMQTT.on('message', async function (topic, payload) {
         let urlStreaming = message.urlStreaming
         // let volume = message.volume
         newStreaming(titleStreaming,urlStreaming,1,()=>{
-            setTimeout(() => {
-            changeVolume(1,function(){
-                console.log(`Cambiando volumen desde la funcion`);
-            })
-            
-            }, 10000);
+            updateStreaming(streaming,titleStreaming,urlStreaming)
         })        
     }else if (topic == suscriber.restart){
         console.log(`ll`);

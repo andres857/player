@@ -1,6 +1,6 @@
 const PlayerController = require('media-player-controller');
 const { streaming, getCurrentStreaming } = require('../streaming')
-// const {successChangeChannel} = require('../broker/publication')
+const {successChangeChannel} = require('../broker/publication')
 
 var player = new PlayerController({
     app: 'vlc',
@@ -10,25 +10,26 @@ var player = new PlayerController({
 
 //   ----- events of player media -----
 // Data object with current playback event 
-player.on('playback', console.log);
+// player.on('playback', console.log);
 
 // Playback started and player can now be controlled
 player.on('playback-started',  async () => {
-     let currentStreaming = getCurrentStreaming(streaming)
+     let currentStreaming = await getCurrentStreaming(streaming)
      let channel = currentStreaming.currentChannel.channel
      let urlStreaming = currentStreaming.currentChannel.url
      console.log(`[ MEDIA PLAYER - Reproductor en emision de ${channel} - ${urlStreaming}]`);
-     console.log(`Simular publicacion en el broker`);
+     await successChangeChannel(channel)
     });
 
 player.on('app-exit', (code) => {
     console.log(`Media player closed. Exit code: ${code}`);
 });
 //   ----- events of player media -----
-// update the object streaming
+// update the object streaming, object streaming, channel, urlChannel
 function updateStreaming(streaming,channel,streamingUrl){
-    streaming.currentChannel.url = channel
-    streaming.currentChannel.channel = streamingUrl
+    streaming.currentChannel.url = streamingUrl
+    streaming.currentChannel.channel = channel
+    console.log(`Actualizando el canal`);
     return streaming
 }
 // Change the streaming
