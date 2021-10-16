@@ -86,7 +86,7 @@ start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio d
 00 06 * * * pi sudo reboot" > /etc/crontab
 stop_spinner $?
 
-start_spinner '- 📔 Instalando Dependecias'
+start_spinner '- 📔 Instalando Dependencias'
     sudo apt remove nodejs -y> /dev/null 2>&1
     cd ~
     curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh

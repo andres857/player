@@ -1,18 +1,17 @@
 const player = require('../player/system')
 
 async function buildTopics(){
-
     let id = await player.serial()
     const topics = {
         suscriber:{
-          channel:`player/channel`,
+          channel:`player/streaming`,
           restart:`player/restart`,
-          request:`player/${id}/request`,
+          request:`player/request/${id}`,
         },
         publish:{
-          status: `player/${id}/status`,
-          response: `player/${id}/response`,
-          currentStreaming: `player/${id}/streaming`
+          status: `player/status/${id}`,
+          response: `player/response/${id}`,
+          currentStreaming: `player/cstreaming/${id}`
         }
     }
     return topics

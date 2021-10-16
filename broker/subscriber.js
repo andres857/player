@@ -1,7 +1,8 @@
-const {clientMQTT} = require ('./index')
+const clientMQTT = require ('./index')
 const {buildTopics} = require('./topics')
 const {newStreaming,updateStreaming} = require('../player/mediaplayer')
 const {streaming} = require('../streaming')
+const shutdown = require('../player/restart')
 
 // susbcriber to all topics
 async function subscriber(){
@@ -22,26 +23,28 @@ clientMQTT.on('message', async function (topic, payload) {
     console.log(`[ Broker - received from topic ${topic} : the message ${payload.toString()} ]`)
     console.log(message)
 
-    if (topic == suscriber.request) {
-        let titleStreaming = message.streaming
-        let urlStreaming = message.urlStreaming
-        player.changeStreaming(titleStreaming,urlStreaming)
-        
+    if (topic == suscriber.request && message.restart == 'device') {
+        shutdown(function(output){
+            console.log(output);
+        });
     }else if (topic == suscriber.channel) {
         let titleStreaming = message.streaming
         let urlStreaming = message.urlStreaming
-        // let volume = message.volume
-        newStreaming(titleStreaming,urlStreaming,1,()=>{
+        let volume = message.volume
+
+        newStreaming(titleStreaming,urlStreaming,volume,()=>{
             updateStreaming(streaming,titleStreaming,urlStreaming)
         })        
-    }else if (topic == suscriber.restart){
-        console.log(`ll`);
+    }else if (topic == suscriber.restart && message.restart == 'device'){
+            shutdown(function(output){
+                console.log(output);
+            });
     }
 })
 
 //{ "streaming" : "caracol" ,"urlStreaming":"http://192.168.0.8/comercial.m3u8","volume": 0.3}
-// subscriber()
 
+subscriber()
 module.exports={
     subscriber
 }
