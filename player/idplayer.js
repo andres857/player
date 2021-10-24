@@ -7,7 +7,7 @@ async function serialPlayer(){
     return serial.slice(0,6)
 }
 
-async function publishStatusPlayer(){
+async function doPublishStatusPlayer(){
     const statusPlayer = await status()
     const id = await serialPlayer()
     clientMQTT.publish(`player/status/${id}`, JSON.stringify(statusPlayer),()=>{
@@ -16,10 +16,10 @@ async function publishStatusPlayer(){
 }
 // se ejecuta cada hora 21600000
 setInterval(async() => {
-    await publishStatusPlayer()
-  }, 21600000);
+    await doPublishStatusPlayer()
+  }, 30000);
 
 module.exports = {
     serialPlayer,
-    publishStatusPlayer
+    doPublishStatusPlayer
 }
