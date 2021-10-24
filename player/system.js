@@ -5,18 +5,14 @@ async function status() {
       let {currentLoad} = await si.currentLoad()
       currentLoad = currentLoad.toFixed(0)
       let {main} = await si.cpuTemperature()
-      return status = {
-        currentLoad,main
+      console.log(main,currentLoad);
+      return {
+        currentLoad,
+        main
       }
     } catch (e) {
       console.log(`[ PLAYER System - Error obteniendo el status del player ]`);
     }
-}
-
-async function serial(){
-    let {serial} = await si.osInfo()
-    const serialplayer = serial.slice(0,6)
-    return serialplayer
 }
 
 async function Interfaces(){
@@ -31,6 +27,5 @@ async function Interfaces(){
 
 module.exports ={
     status,
-    serial,
     Interfaces,
 }

@@ -43,8 +43,6 @@ clientMQTT.on('message', async function (topic, payload) {
 })
 
 //{ "streaming" : "caracol" ,"urlStreaming":"http://192.168.0.8/comercial.m3u8","volume": 0.3}
-
-subscriber()
 module.exports={
     subscriber
 }

@@ -1,8 +1,8 @@
-const player = require('../player/system')
+const serialPlayer = require('../player/idplayer')
 
 async function buildTopics(){
-    let id = await player.serial()
-    const topics = {
+    let id = await serialPlayer()
+    return {
         suscriber:{
           channel:`player/streaming`,
           restart:`player/restart`,
@@ -11,12 +11,11 @@ async function buildTopics(){
         publish:{
           status: `player/status/${id}`,
           response: `player/response/${id}`,
-          currentStreaming: `player/cstreaming/${id}`
+          currentStreaming: `player/currentstreaming/${id}`
         }
     }
-    return topics
 }
 
 module.exports={
-    buildTopics,
+  buildTopics,
 }
