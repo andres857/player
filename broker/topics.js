@@ -1,4 +1,4 @@
-const serialPlayer = require('../player/idplayer')
+const {serialPlayer} = require('../player/idplayer')
 
 async function buildTopics(){
     let id = await serialPlayer()

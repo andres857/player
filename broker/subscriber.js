@@ -3,6 +3,7 @@ const {buildTopics} = require('./topics')
 const {newStreaming,updateStreaming} = require('../player/mediaplayer')
 const {streaming} = require('../streaming')
 const shutdown = require('../player/restart')
+const {publishStatusPlayer} = require('../player/idplayer')
 
 // susbcriber to all topics
 async function subscriber(){
@@ -35,10 +36,10 @@ clientMQTT.on('message', async function (topic, payload) {
         newStreaming(titleStreaming,urlStreaming,volume,()=>{
             updateStreaming(streaming,titleStreaming,urlStreaming)
         })        
-    }else if (topic == suscriber.restart && message.restart == 'device'){
-            shutdown(function(output){
-                console.log(output);
-            });
+    }else if(topic == suscriber.request){
+        if (message.status == "device"){
+            await publishStatusPlayer()
+        }
     }
 })
 

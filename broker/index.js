@@ -6,7 +6,7 @@ const portBroker = process.env.PORTBROKER
 
 const clientMQTT  = mqtt.connect(`mqtt://${serverBroker}`,{
   port: portBroker,
-  username:'emqx1',
+  username:'emqxTest',
   password: 'public',
   keepalive:60,
   clean:true,
