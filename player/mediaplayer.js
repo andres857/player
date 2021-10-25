@@ -20,7 +20,7 @@ player.on('playback-started',  async () => {
      let channel = currentStreaming.currentChannel.channel
      let urlStreaming = currentStreaming.currentChannel.url
      console.log(`[ MEDIA PLAYER - Reproductor en emision de ${channel} - ${urlStreaming}]`)
-     await doPublishSuccessChangeChannel(channel)
+     await doPublishSuccessChangeChannel(streaming.currentChannel)
     });
 
 player.on('app-exit', (code) => {

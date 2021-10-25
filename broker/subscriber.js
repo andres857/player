@@ -3,7 +3,7 @@ const {buildTopics} = require('./topics')
 const {newStreaming,updateStreaming,changeVolume} = require('../player/mediaplayer')
 const {streaming} = require('../streaming')
 const shutdown = require('../player/restart')
-const {publishStatusPlayer} = require('../player/idplayer')
+const {doPublishStatusPlayer} = require('../player/idplayer')
 
 // susbcriber to all topics
 async function subscriber(){
@@ -38,7 +38,7 @@ clientMQTT.on('message', async function (topic, payload) {
         })        
     }else if(topic == suscriber.request){
         if (message.status == "device"){
-            await publishStatusPlayer()
+            await doPublishStatusPlayer()
         }else if( message.volume){
             changeVolume(message.volume,()=>{
                 console.log(`[ Broker - Cambiando volumen del player ]`);
