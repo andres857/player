@@ -4,7 +4,7 @@ async function buildTopics(){
     let id = await serialPlayer()
     return {
         suscriber:{
-          channel:`player/streaming`,
+          streaming:`player/streaming`,
           restart:`player/restart`,
           request:`player/request/${id}`,
         },

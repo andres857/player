@@ -13,24 +13,24 @@ const player = new PlayerController({
 //   ----- events of player media -----
 // Data object with current playback event 
 player.on('playback', (data)=>{
-    let mediaPlayerIsActive = playerIsActive(data.value)
-    if (mediaPlayerIsActive) {
-        console.log(`reproductor en emision`);
-    }else{
-        console.log(`el reproductor paro la emision`);
-    }
+    // let mediaPlayerIsActive = playerIsActive(data.value)
+    // if (mediaPlayerIsActive) {
+    //     console.log(`reproductor en emision`);
+    // }else{
+    //     console.log(`el reproductor paro la emision`);
+    // }
 });
-var previosValue = 0
 
-function playerIsActive(data){
-    if (data > previosValue){    
-        console.log(`valor previo: ${previosValue} || valor actual: ${data}`);
-        previosValue = data
-        return true
-    }else{
-        return false
-    }
-}
+// var previosValue = 0
+// function playerIsActive(data){
+//     if (data > previosValue){    
+//         console.log(`valor previo: ${previosValue} || valor actual: ${data}`);
+//         previosValue = data
+//         return true
+//     }else{
+//         return false
+//     }
+// }
 // Playback started and player can now be controlled
 player.on('playback-started',  async () => {
      let currentStreaming = getCurrentStreaming(streaming)

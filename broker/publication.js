@@ -7,7 +7,7 @@ function doPublishResponse(topic,message){
 
 async function doPublishSuccessChangeChannel(channel){
     let topics = await buildTopics()
-    clientMQTT.publish(topics.publish.currentStreaming,JSON.stringify(channel))
+    clientMQTT.publish(topics.publish.currentStreaming,JSON.stringify(channel),{qos:2, retain:true})
     console.log(`[ Broker - publicando en ${topics.publish.response} el canal : ${channel} ]`);
 }
 
