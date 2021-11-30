@@ -3,11 +3,14 @@ const mqtt = require('mqtt')
 
 const serverBroker = process.env.SERVERBROKER
 const portBroker = process.env.PORTBROKER
+const usernameBroker = process.env.USERNAME
+const passwordBroker = process.env.PASSWORD
+
 
 const clientMQTT  = mqtt.connect(`mqtt://${serverBroker}`,{
   port: portBroker,
-  username:'emqxTest',
-  password: 'public',
+  username: usernameBroker,
+  password: passwordBroker,
   keepalive:60,
   clean:true,
   reconnectPeriod: 10000,

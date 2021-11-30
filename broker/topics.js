@@ -1,17 +1,20 @@
+require('dotenv').config({ path: '~/player/.env'})
 const {serialPlayer} = require('../player/idplayer')
+
+const client = process.env.CLIENT
 
 async function buildTopics(){
     let id = await serialPlayer()
     return {
         suscriber:{
-          streaming:`player/streaming`,
-          restart:`player/restart`,
-          request:`player/request/${id}`,
+          streaming:`${client}player/streaming`,
+          restart:`${client}player/restart`,
+          request:`${client}player/request/${id}`,
         },
         publish:{
-          status: `player/status/${id}`,
-          response: `player/response/${id}`,
-          currentStreaming: `player/currentstreaming/${id}`
+          status: `${client}player/status/${id}`,
+          response: `${client}player/response/${id}`,
+          currentStreaming: `${client}player/currentstreaming/${id}`
         }
     }
 }
