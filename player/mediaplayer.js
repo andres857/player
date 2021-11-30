@@ -13,24 +13,11 @@ const player = new PlayerController({
 //   ----- events of player media -----
 // Data object with current playback event 
 player.on('playback', (data)=>{
-    // let mediaPlayerIsActive = playerIsActive(data.value)
-    // if (mediaPlayerIsActive) {
-    //     console.log(`reproductor en emision`);
-    // }else{
-    //     console.log(`el reproductor paro la emision`);
-    // }
+    if (process.env.APP_ENV == 'devel'){
+        console.log(data)
+    }
 });
 
-// var previosValue = 0
-// function playerIsActive(data){
-//     if (data > previosValue){    
-//         console.log(`valor previo: ${previosValue} || valor actual: ${data}`);
-//         previosValue = data
-//         return true
-//     }else{
-//         return false
-//     }
-// }
 // Playback started and player can now be controlled
 player.on('playback-started',  async () => {
      let currentStreaming = getCurrentStreaming(streaming)
@@ -46,17 +33,17 @@ player.on('app-exit', (code) => {
 //   ----- end events of player media -----
 
 
-// update the object streaming, object streaming, channel, urlChannel
+// update the object streaming, object streaming, current channel, current urlChannel
 function updateStreaming(streaming,channel,streamingUrl){
     streaming.currentChannel.url = streamingUrl
     streaming.currentChannel.channel = channel
-    console.log(`[ Media Player - Update the Current Channel ]`);
+    console.log(`[ MEDIA PLAYER - Update the Current Channel ]`);
     return streaming
 }
 // Change the streaming
 function newStreaming(streamingName, streamingUrl,cb){
     player.load(streamingUrl,()=>{
-        console.log(`[ Media Player - Canal ${streamingName} : Url Streaming ${streamingUrl} ]`);
+        console.log(`[ MEDIA PLAYER - Canal ${streamingName} : Url Streaming ${streamingUrl} ]`);
         cb()
     })
 }
