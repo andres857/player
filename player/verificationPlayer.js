@@ -30,7 +30,7 @@ function playingPlayer(){
         }if (currentValue == previousvalue) {
             //function try reconnect to encoder five times, every 60 seconds
             attemps = attemps + 1
-            console.log(`soy un mensaje de prueba 1`);
+            console.log(`soy un mensaje de prueba 2`);
             if (attemps >= 25 && !playerOffline){
                 
                 console.log(`El reproductor se detuvo ERROR posible interferencia en la red`);
