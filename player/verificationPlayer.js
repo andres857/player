@@ -29,6 +29,7 @@ function playingPlayer(){
             previousvalue = currentValue
         }if (currentValue == previousvalue) {
             //function try reconnect to encoder five times, every 60 seconds
+            console.log(`cambio para continuar a partir de la version actual`);
             attemps = attemps + 1
             if (attemps >= 25 && !playerOffline){
                 
