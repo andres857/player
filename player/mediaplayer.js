@@ -2,7 +2,9 @@ require('dotenv').config({ path: '~/player/.env'})
 
 const PlayerController = require('media-player-controller');
 const { streaming, getCurrentStreaming } = require('../streaming')
-const {doPublishSuccessChangeChannel} = require('../broker/publication')
+const {doPublishSuccessChangeChannel} = require('../broker/publication');
+
+var dataplayer;
 
 const player = new PlayerController({
     app: 'vlc',
@@ -10,13 +12,24 @@ const player = new PlayerController({
     media: streaming.wchannel.url
   });
 
+const playerOffLine = new PlayerController({
+    app: 'vlc',
+    args: ['--fullscreen','--video-on-top', '--no-video-title-show'],
+    media: '/home/pi/Videos/HIDDEN_261_25528_VIDEO_Carlos_jovenes_en_la_organizacion.mp4'
+  });
+
 //   ----- events of player media -----
 // Data object with current playback event 
-player.on('playback', (data)=>{
+player.on('playback', (d)=>{
     if (process.env.APP_ENV == 'devel'){
-        console.log(data)
+        dataplayer = d.value
+        console.log(dataplayer,'value')
     }
 });
+
+function getdatastremingplayer(){
+    return dataplayer
+}
 
 // Playback started and player can now be controlled
 player.on('playback-started',  async () => {
@@ -69,5 +82,8 @@ module.exports = {
     launch,
     changeVolume,
     newStreaming,
-    updateStreaming
+    updateStreaming,
+    getdatastremingplayer,
+    player,
+    playerOffLine
 }
