@@ -12,12 +12,6 @@ const player = new PlayerController({
     media: streaming.wchannel.url
   });
 
-const playerOffLine = new PlayerController({
-    app: 'vlc',
-    args: ['--fullscreen','--video-on-top', '--no-video-title-show'],
-    media: '/home/pi/Videos/HIDDEN_261_25528_VIDEO_Carlos_jovenes_en_la_organizacion.mp4'
-  });
-
 //   ----- events of player media -----
 // Data object with current playback event 
 player.on('playback', (d)=>{
@@ -45,7 +39,21 @@ player.on('app-exit', (code) => {
 });
 //   ----- end events of player media -----
 
-
+const restartPlayer = function(reason,nameChannel,url){
+    player.quit(e => {
+        if(e) return console.error(`[ Player - Error closing media player ${e.message} ] `);
+        console.log(`[ Player - Closing Media Player Streaming from ${reason} ]`);
+      })
+  
+    setTimeout(()=>{
+    //   player.launch(err => {
+    //       if(err) return console.error(`[ Player - Error starting media player ${err.message} ] `);
+    //         console.log(`[ player - restarted player Success]`);
+    //         player.load(streaming.local.url)
+    //   });
+    launch(nameChannel,url)
+    },3000)
+  }
 // update the object streaming, object streaming, current channel, current urlChannel
 function updateStreaming(streaming,channel,streamingUrl){
     streaming.currentChannel.url = streamingUrl
@@ -67,11 +75,11 @@ function changeVolume(volume,cb){
 }
 
 //Se definen los parametros del player, url, volumen etc
-function launch(){
+function launch(nameChannel,url){
     player.launch(function(){
         // se define el canal inicial cuando el reproductor se inicia
-        let channel = streaming.wchannel.channel
-        let streamingUrl = streaming.wchannel.url 
+        let channel = nameChannel
+        let streamingUrl = url
         newStreaming(channel,streamingUrl,()=>{
             updateStreaming(streaming,channel,streamingUrl)
         })
@@ -84,6 +92,6 @@ module.exports = {
     newStreaming,
     updateStreaming,
     getdatastremingplayer,
+    restartPlayer,
     player,
-    playerOffLine
 }

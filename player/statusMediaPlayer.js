@@ -1,24 +1,35 @@
 require('dotenv').config({ path: '~/player/.env'})
-const {getdatastremingplayer} = require('./mediaplayer')
-const {player,playerOffLine} = require('./mediaplayer')
+const {getdatastremingplayer,restartPlayer} = require('./mediaplayer')
+const {streaming} = require('../streaming')
 const moment = require('moment')
 
-var previousvalue = 0; 
+let previousvalue = 0; 
 const checktime = process.env.PLAYERCHECKTIME * 10000
-var playerOffline = false;
+let attempsConnectEncoder = 0;
+let statusMediaPlayer = true;
 
 function playingPlayer(){
 // evaluate if the player media is playing .... 
     setInterval(()=>{
         let currentValue = getdatastremingplayer()
         if ( currentValue == previousvalue || currentValue == true){
-            console.log(`${moment().format('MMMM Do YYYY, h:mm:ss a')} : El reproductor se detuvo : valor anterior: ${previousvalue} || valor actual ${currentValue}`);    
+            statusMediaPlayer = false    
+            attempsConnectEncoder = attempsConnectEncoder + 1
+            console.log(`${moment().format('MMMM Do YYYY, h:mm:ss a')} : El reproductor se detuvo ${statusMediaPlayer}: valor anterior: ${previousvalue} || valor actual ${currentValue}`);    
+            restartPlayer('El player se cerro inesperadamente, reiniciando reproductor multimedia',
+            streaming.local.channel,streaming.local.url)
+            if (attempsConnectEncoder >= 5){
+                console.log(`imposible conectar con el encoder, abriendo reporduccion local de videos`);
+            }
         }else{
-            console.log(`${moment().format('MMMM Do YYYY, h:mm:ss a')} El reproductor esta en emision: valor anterior: ${previousvalue} || valor actual ${currentValue}`);
+            statusMediaPlayer = true
+            console.log(`${moment().format('MMMM Do YYYY, h:mm:ss a')} El reproductor esta en emision ${statusMediaPlayer}: valor anterior: ${previousvalue} || valor actual ${currentValue}`);
             previousvalue = currentValue
         }
     },checktime)
 }
+
+
 
 module.exports = {
     playingPlayer
