@@ -1,7 +1,7 @@
 #!/usr/bin/node
 const {launch} = require('./player/mediaplayer')
 const {subscriber} = require('./broker/subscriber')
-require('./player/verificationPlayer').playingPlayer()
+require('./player/statusMediaPlayer').playingPlayer()
 
 async function main(){
     try {
