@@ -28,12 +28,20 @@ clientMQTT.on('message', async function (topic, payload) {
         shutdown(function(output){
             console.log(output);
         });
-    }else if (topic == suscriber.channel) {
+    }else if (topic == suscriber.newStreaming) {
         let titleStreaming = message.streaming
         let urlStreaming = message.urlStreaming
         let volume = message.volume
 
-        newStreaming(titleStreaming,urlStreaming,volume,()=>{
+        newStreaming(titleStreaming,urlStreaming,()=>{
+            updateStreaming(streaming,titleStreaming,urlStreaming)
+        })        
+    }else if (topic == suscriber.newStreamingPlayer) {
+        let titleStreaming = message.streaming
+        let urlStreaming = message.urlStreaming
+        let volume = message.volume
+
+        newStreaming(titleStreaming,urlStreaming,()=>{
             updateStreaming(streaming,titleStreaming,urlStreaming)
         })        
     }else if(topic == suscriber.request){

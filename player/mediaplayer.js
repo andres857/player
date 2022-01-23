@@ -1,5 +1,4 @@
 require('dotenv').config({ path: '~/player/.env'})
-
 const PlayerController = require('media-player-controller');
 const { streaming, getCurrentStreaming } = require('../streaming')
 const {doPublishSuccessChangeChannel} = require('../broker/publication');
@@ -44,36 +43,29 @@ const restartPlayer = function(reason,nameChannel,url){
         if(e) return console.error(`[ Player - Error closing media player ${e.message} ] `);
         console.log(`[ Player - Closing Media Player Streaming from ${reason} ]`);
       })
-  
     setTimeout(()=>{
-    //   player.launch(err => {
-    //       if(err) return console.error(`[ Player - Error starting media player ${err.message} ] `);
-    //         console.log(`[ player - restarted player Success]`);
-    //         player.load(streaming.local.url)
-    //   });
     launch(nameChannel,url)
     },3000)
   }
-// update the object streaming, object streaming, current channel, current urlChannel
+// update the object streaming, object streaming, NEW current channel, NEW current urlChannel
 function updateStreaming(streaming,channel,streamingUrl){
-    streaming.currentChannel.url = streamingUrl
     streaming.currentChannel.channel = channel
+    streaming.currentChannel.url = streamingUrl
     console.log(`[ MEDIA PLAYER - Update the Current Channel ]`);
     return streaming
-}
+  }
 // Change the streaming
-function newStreaming(streamingName, streamingUrl,cb){
-    player.load(streamingUrl,()=>{
-        console.log(`[ MEDIA PLAYER - Canal ${streamingName} : Url Streaming ${streamingUrl} ]`);
+function newStreaming(streamingName, urlStreaming,cb){
+    player.load(urlStreaming,()=>{
+        console.log(`[ MEDIA PLAYER NUEVO STREAMING - Canal ${streamingName} : Url Streaming ${urlStreaming} ]`);
         cb()
     })
-}
+  }
 
 function changeVolume(volume,cb){
     player.setVolume(volume)
     cb()
 }
-
 //Se definen los parametros del player, url, volumen etc
 function launch(nameChannel,url){
     player.launch(function(){
