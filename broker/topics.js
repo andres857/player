@@ -7,7 +7,8 @@ async function buildTopics(){
     let id = await serialPlayer()
     return {
         suscriber:{
-          streaming:`${client}/player/streaming`,
+          newStreaming:`${client}/player/streaming`, // Topic change the channel for all players, topic general
+          newStreamingPlayer:`${client}/player/streaming/${id}`,//Change the streaming only this player
           restart:`${client}/player/restart`,
           request:`${client}/player/request/${id}`,
         },
