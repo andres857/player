@@ -8,6 +8,7 @@ const {doPublishStatusPlayer} = require('../player/idplayer')
 // susbcriber to all topics
 async function subscriber(){
     const topics = await buildTopics()
+    console.log(topics);
     for (let topic in topics.suscriber) {
         clientMQTT.subscribe(topics.suscriber[topic], function (err) {
             if (!err) {
@@ -29,7 +30,7 @@ clientMQTT.on('message', async function (topic, payload) {
             console.log(output);
         });
     }else if (topic == suscriber.newStreaming) {
-        let titleStreaming = message.streaming
+        let titleStreaming = message.titleStreaming
         let urlStreaming = message.urlStreaming
         let volume = message.volume
 
@@ -37,11 +38,12 @@ clientMQTT.on('message', async function (topic, payload) {
             updateStreaming(streaming,titleStreaming,urlStreaming)
         })        
     }else if (topic == suscriber.newStreamingPlayer) {
-        let titleStreaming = message.streaming
+
+        let titleStreaming = message.titleStreaming
         let urlStreaming = message.urlStreaming
-        let volume = message.volume
 
         newStreaming(titleStreaming,urlStreaming,()=>{
+            console.log('ejectando cambio de streaming');
             updateStreaming(streaming,titleStreaming,urlStreaming)
         })        
     }else if(topic == suscriber.request){
