@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '~/player/.env'})
+require('dotenv').config({ path: '/home/pi/player/.env'})
 const {getdatastremingplayer,restartPlayer} = require('./mediaplayer')
 const {streaming} = require('../streaming')
 const moment = require('moment')

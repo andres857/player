@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '~/player/.env'})
+require('dotenv').config({ path: '/home/pi/player/.env'})
 const PlayerController = require('media-player-controller');
 const { streaming, getCurrentStreaming } = require('../streaming')
 const {doPublishSuccessChangeChannel} = require('../broker/publication');

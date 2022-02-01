@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({ path: '/home/pi/player/.env'})
 
 streaming = {
     wchannel : {
