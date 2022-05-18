@@ -15,8 +15,7 @@ const player = new PlayerController({
 // Data object with current playback event 
 player.on('playback', (d)=>{
     if (process.env.APP_ENV == 'devel'){
-        dataplayer = d.value
-        console.log(dataplayer,'value')
+        console.log(d.value,'value')
     }
 });
 
