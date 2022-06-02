@@ -1,5 +1,6 @@
 #!/bin/bash
 export DISPLAY=:0 
+unclutter -idle 0 &
 
 SCRIPT=~/player/app.js 
 # Absolute path to output log file

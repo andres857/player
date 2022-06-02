@@ -88,7 +88,8 @@ start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio d
 stop_spinner $?
 
 start_spinner '- 📔 Instalando Dependencias'
-    sudo apt remove nodejs -y> /dev/null 2>&1
+    sudo apt install unclutter -y > /dev/null 2>&1
+    sudo apt remove nodejs -y > /dev/null 2>&1
     cd ~
     curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
     sudo bash nodesource_setup.sh > /dev/null 2>&1
