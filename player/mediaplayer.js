@@ -3,8 +3,6 @@ const PlayerController = require('media-player-controller');
 const { streaming, getCurrentStreaming } = require('../streaming')
 const {doPublishSuccessChangeChannel} = require('../broker/publication');
 
-var dataplayer;
-
 const player = new PlayerController({
     app: 'vlc',
     args: ['--fullscreen','--video-on-top', '--no-video-title-show'],
@@ -19,9 +17,6 @@ player.on('playback', (d)=>{
     }
 });
 
-function getdatastremingplayer(){
-    return dataplayer
-}
 
 // Playback started and player can now be controlled
 player.on('playback-started',  async () => {
@@ -82,7 +77,6 @@ module.exports = {
     changeVolume,
     newStreaming,
     updateStreaming,
-    getdatastremingplayer,
     restartPlayer,
     player,
 }

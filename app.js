@@ -2,7 +2,6 @@
 const { streaming } = require('./streaming')
 const {launch} = require('./player/mediaplayer')
 const {subscriber} = require('./broker/subscriber')
-require('./player/statusMediaPlayer').playingPlayer()
 
 async function main(){
     try {

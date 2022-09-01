@@ -13,6 +13,8 @@ async function subscriber(){
         clientMQTT.subscribe(topics.suscriber[topic], function (err) {
             if (!err) {
                 console.log(`[ BROKER - Client subscriber to topic ${topics.suscriber[topic]}]`);
+            }else{
+                console.log('[BROKER - Error en la suscripcion]');
             }
         })
     }
