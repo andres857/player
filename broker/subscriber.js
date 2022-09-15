@@ -1,31 +1,40 @@
 const clientMQTT = require ('./index')
 const {buildTopics} = require('./topics')
 const {newStreaming,updateStreaming,changeVolume} = require('../player/mediaplayer')
-const {streaming} = require('../streaming')
 const shutdown = require('../player/restart')
 const {doPublishStatusPlayer} = require('../player/idplayer')
+const currentDate = require('../date')
+
 
 // susbcriber to all topics
-async function subscriber(){
-    const topics = await buildTopics()
-    console.log(topics);
-    for (let topic in topics.suscriber) {
-        clientMQTT.subscribe(topics.suscriber[topic], function (err) {
-            if (!err) {
-                console.log(`[ BROKER - Client subscriber to topic ${topics.suscriber[topic]}]`);
-            }else{
-                console.log('[BROKER - Error en la suscripcion]');
-            }
-        })
-    }
+function subscriber(){
+    return new Promise((resolve) => {
+        const { suscriber } = buildTopics()
+        console.log(suscriber);
+        console.log(`${currentDate()}`);
+        resolve(
+            setTimeout(()=>{
+                for (let topic in suscriber) {
+                    clientMQTT.subscribe(suscriber[topic], function (err) {
+                        if (!err) {
+                            console.log(`[ BROKER - Client subscriber to topic ${suscriber[topic]}- ${currentDate()}]`);
+                        }else{
+                            console.log(`[ BROKER - Error en la suscripcion - ${currentDate()}]`);
+                            console.log(err);
+                        }
+                    })
+                }
+            },5000)
+        )
+    })
 }
 
 // event listen messages from broker
 clientMQTT.on('message', async function (topic, payload) {
     let message = JSON.parse(payload)
-    let {suscriber} = await buildTopics()
+    let { suscriber } = buildTopics()
     console.log(`[ Broker - received from topic ${topic} : the message ${payload.toString()} ]`)
-    console.log(message)
+    console.log( message )
 
     if (topic == suscriber.request && message.restart == 'device') {
         shutdown(function(output){
@@ -37,7 +46,7 @@ clientMQTT.on('message', async function (topic, payload) {
         let volume = message.volume
 
         newStreaming(titleStreaming,urlStreaming,()=>{
-            updateStreaming(streaming,titleStreaming,urlStreaming)
+            updateStreaming(titleStreaming,urlStreaming)
         })        
     }else if (topic == suscriber.newStreamingPlayer) {
 
@@ -59,7 +68,12 @@ clientMQTT.on('message', async function (topic, payload) {
     }
 })
 
-//{ "streaming" : "caracol" ,"urlStreaming":"http://192.168.0.8/comercial.m3u8","volume": 0.3}
+// { 
+//     "streaming" : "caracol" ,
+//     "urlStreaming":"http://192.168.0.8/comercial.m3u8",
+//     "volume": 0.3
+// }
+
 module.exports={
     subscriber
 }

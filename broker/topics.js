@@ -3,8 +3,8 @@ const {serialPlayer} = require('../player/idplayer')
 
 const client = process.env.CLIENT
 
-async function buildTopics(){
-    let id = await serialPlayer()
+function buildTopics(){
+    let id = serialPlayer()
     return {
         suscriber:{
           newStreaming:`${client}/player/streaming`, // Topic change the channel for all players, topic general

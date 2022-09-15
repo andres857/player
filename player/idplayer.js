@@ -1,10 +1,15 @@
-const si = require('systeminformation')
+// const si = require('systeminformation')
 const {status} = require('./system')
 const clientMQTT = require('../broker/index')
+const os = require('os')
 
-async function serialPlayer(){
-    let {serial} = await si.osInfo()
-    return serial.slice(0,6)
+function serialPlayer(){
+    const networks = os.networkInterfaces()
+    let { mac } = networks.eth0[0]
+    let serial =  mac.replace(/:/g, '');
+    // let {serial} = await si.osInfo()
+    // return serial.slice(0,6)
+    return serial 
 }
 
 async function doPublishStatusPlayer(){
@@ -14,10 +19,6 @@ async function doPublishStatusPlayer(){
       console.log(`mensaje publicado en topic player/status/${id}`);
     })
 }
-// se ejecuta cada hora 21600000
-setInterval(async() => {
-    await doPublishStatusPlayer()
-  }, 21600000);
 
 module.exports = {
     serialPlayer,

@@ -13,9 +13,10 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "media-player-controller": "^1.5.3",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "mqtt": "^4.2.8",
-    "nodemon": "^2.0.13",
-    "systeminformation": "^5.9.4"
+    "nodemon": "^2.0.19",
+    "systeminformation": "^5.9.4",
+    "xrandr": "^1.3.0"
   }
 }
