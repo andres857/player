@@ -11,7 +11,6 @@ function subscriber(){
     return new Promise((resolve) => {
         const { suscriber } = buildTopics()
         console.log(suscriber);
-        console.log(`${currentDate()}`);
         resolve(
             setTimeout(()=>{
                 for (let topic in suscriber) {

@@ -9,7 +9,7 @@ function serialPlayer(){
     let serial =  mac.replace(/:/g, '');
     // let {serial} = await si.osInfo()
     // return serial.slice(0,6)
-    return serial 
+    return serial .slice(-6)
 }
 
 async function doPublishStatusPlayer(){
