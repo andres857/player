@@ -5,14 +5,26 @@ streamings = {
   institutional : {
     url: process.env.URL_STREAMING_INSTITUCIONAL,
     name: 'Windows Channel TV',
+    volume:{
+      active:false,
+      level:''
+    }
   },
   commercial : {
     url: process.env.URL_STREAMING_COMERCIAL,
-    name: "Caracol" // Canal comercial por defecto
+    name: "Caracol", // Canal comercial por defecto,
+    volume:{
+      active:false,
+      level:''
+    }
   },
   current :{
     url:'',
-    name:''
+    name:'',
+    volume:{
+      active:false,
+      level:''
+    }
   } 
 }
 

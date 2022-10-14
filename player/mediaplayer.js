@@ -7,7 +7,7 @@ const currentDate = require('../date')
 
 const player = new PlayerController({
     app: 'vlc',
-    args: ['--fullscreen','--video-on-top', '--no-video-title-show'],
+    args: ['--fullscreen', '--no-video-title-show'],//'--video-on-top'
     // args: ['--video-on-top', '--no-video-title-show'],
     media: streamings.institutional.url
   });
@@ -23,7 +23,8 @@ player.on('playback', (d)=>{
 // Playback started and player can now be controlled
 player.on('playback-started',  async () => {
      let { current } = streamings
-     console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ current.name } - ${ current.url } - ${currentDate()}]`)
+     console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ current.name } - ${ current.url } - ${currentDate()} ]`)
+    //  colocar una bandera de reproduccion del reproductor multimedia 
      //  publish every time player started
     //  await doPublishSuccessChangeChannel(current)
     });
@@ -42,6 +43,7 @@ function launch(name, url){
     });
 }
 
+// testar funcion
 function launchCurrentStream(){
     let { current, institutional } = streamings
     if ( current.url === '' || current.name === '' ){
