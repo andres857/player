@@ -1,5 +1,5 @@
 require('dotenv').config({ path: '~/player/.env'})
-const {serial} = require('../player/info')
+const { serial } = require('../player/info')
 
 const client = process.env.CLIENT
 

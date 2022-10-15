@@ -2,7 +2,7 @@ require('dotenv').config({ path: '/home/pi/player/.env'})
 const PlayerController = require('media-player-controller');
 const streamings = require('../streamings')
 const currentDate = require('../date')
-// const { doPublishSuccessChangeChannel } = require('../broker/publication');
+const { doPublishLaunchPlayer } = require('../broker/publication');
 
 
 const player = new PlayerController({
@@ -23,10 +23,11 @@ player.on('playback', (d)=>{
 // Playback started and player can now be controlled
 player.on('playback-started',  async () => {
      let { current } = streamings
+     streamings.current.inbroadcast = true 
      console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ current.name } - ${ current.url } - ${currentDate()} ]`)
-    //  colocar una bandera de reproduccion del reproductor multimedia 
-     //  publish every time player started
-    //  await doPublishSuccessChangeChannel(current)
+    //  colocar una bandera de reproduccion del reproductor multimedia
+    await doPublishLaunchPlayer(current)
+    console.log(current);
     });
 
 player.on('app-exit', async (code) => {
@@ -43,7 +44,7 @@ function launch(name, url){
     });
 }
 
-// testar funcion
+// testear funcion
 function launchCurrentStream(){
     let { current, institutional } = streamings
     if ( current.url === '' || current.name === '' ){
@@ -78,6 +79,7 @@ function updateStreaming( name, url){
 // Change the streaming and update object streaming
 function newStreaming(name, url){
     player.load( url, ()=>{
+        console.log(streamings.current.inbroadcast);
         console.log(`[ MEDIA PLAYER NUEVO STREAMING - Canal: ${name} - Url Streaming: ${url} - ${currentDate()} ]`);
         updateStreaming(name, url)
     })

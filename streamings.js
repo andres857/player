@@ -19,6 +19,7 @@ streamings = {
     }
   },
   current :{
+    inbroadcast: false,
     url:'',
     name:'',
     volume:{
