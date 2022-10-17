@@ -3,7 +3,7 @@ const { buildTopics } = require('./topics')
 const { newStreaming } = require('../player/mediaplayer')
 const shutdown = require('../player/restart')
 const {doPublishStatusPlayer} = require('./publication')
-const currentDate = require('../date')
+const {currentDate} = require('../date')
 
 // susbcriber to all topics
 function subscriber(){

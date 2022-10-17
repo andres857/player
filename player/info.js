@@ -3,12 +3,11 @@ const os = require('os')
 
 async function status() {
     try {
-      let { currentLoad, avgLoad } = await si.currentLoad()
-      let { main } = await si.cpuTemperature()
+      const { currentLoad } = await si.currentLoad()
+      const { main } = await si.cpuTemperature()
       return {
-        temperature: main,
+        temperature: main.toString(),
         load: currentLoad.toFixed(2),
-        avg: avgLoad.toFixed(2)
       }
     } catch (e) {
       console.log(`[ PLAYER System - Error obteniendo el status del player ]`);

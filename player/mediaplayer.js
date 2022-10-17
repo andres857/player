@@ -1,7 +1,7 @@
 require('dotenv').config({ path: '/home/pi/player/.env'})
 const PlayerController = require('media-player-controller');
 const streamings = require('../streamings')
-const currentDate = require('../date')
+const {currentDate} = require('../date')
 const { doPublishLaunchPlayer } = require('../broker/publication');
 
 

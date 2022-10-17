@@ -1,7 +1,8 @@
 const clientMQTT = require('./index')
 const { buildTopics } = require('../broker/topics')
 const { status } = require('../player/info')
-const currentDate = require('../date')
+const {currentDate} = require('../date')
+const { current } = require('../streamings')
 
 
 function doPublishResponse(topic,message){
@@ -21,11 +22,16 @@ async function doPublishLaunchPlayer(currentStreaming){
 async function doPublishStatusPlayer(){
     const { publish } = buildTopics()
     const statusPlayer = await status()
-    clientMQTT.publish( publish.status, JSON.stringify(statusPlayer), { 
+    const payload = {
+        statusPlayer,
+        current
+    } 
+    clientMQTT.publish( publish.status, JSON.stringify(payload), { 
         qos:2, 
         retain:true 
     }, ()=>{
-      console.log(`[ Broker - publicando en ${publish.status} el mensaje : ${statusPlayer} - ${currentDate()}]`);
+        console.table(payload)
+        console.log(`${currentDate()}`);
     })
   }
 

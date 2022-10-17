@@ -99,7 +99,9 @@ stop_spinner $?
 start_spinner '- 📥 Instalando librerias'
     cd /home/pi/player
     touch /home/pi/player/player.log
+    touch /home/pi/player/status.log
     sudo chown pi: /home/pi/player/player.log
+    sudo chown pi: /home/pi/player/status.log
     sudo chmod +x /home/pi/player/app.js
     sudo chmod +x /home/pi/player/run_on_boot.sh
     npm i > /dev/null 2>&1
