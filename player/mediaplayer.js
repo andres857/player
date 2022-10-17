@@ -1,9 +1,8 @@
-require('dotenv').config({ path: '/home/pi/player/.env'})
+require('dotenv').config({ path: '~/player/.env'})
 const PlayerController = require('media-player-controller');
 const streamings = require('../streamings')
 const {currentDate} = require('../date')
 const { doPublishLaunchPlayer } = require('../broker/publication');
-
 
 const player = new PlayerController({
     app: 'vlc',

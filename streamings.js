@@ -1,5 +1,4 @@
-require('dotenv').config({ path: '/home/pi/player/.env'})
-
+require('dotenv').config({ path: '~/player/.env'})
 streamings = {
   // channel by default
   institutional : {

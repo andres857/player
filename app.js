@@ -9,6 +9,7 @@ async function main(){
     await subscriber()
     await launch( streamings.institutional.name, streamings.institutional.url)
 } catch (error) {
+    console.log(error);
         console.log(`Error lanzando el reproductor ${error}`);
     } 
 }
