@@ -26,6 +26,10 @@ streamings = {
     volume:{
       active:false,
       level:''
+    },
+    monitor:{
+      playerClosed: 0,
+      time_pos: ''
     }
   } 
 }

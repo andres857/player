@@ -22,36 +22,47 @@ player.on('playback', (d)=>{
 
 // Playback started and player can now be controlled
 player.on('playback-started',  async () => {
-     let { current } = streamings
-     streamings.current.inbroadcast = true 
-     console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ current.name } - ${ current.url } - ${currentDate()} ]`)
+    streamings.current.inbroadcast = true 
+    console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ streamings.current.name } - ${ streamings.current.url } - ${currentDate()} ]`)
     //  colocar una bandera de reproduccion del reproductor multimedia
-    await doPublishLaunchPlayer(current)
-    console.log(current);
+    await doPublishLaunchPlayer(streamings.current)
     });
 
 player.on('app-exit', async (code) => {
+    let { current } = streamings
+    current.monitor.playerClosed + 1
     console.log(`[ MEDIA PLAYER - player closed - ${currentDate()} - exit code: ${code} ] `);
-    launchCurrentStream()
+    if(current.monitor.playerClosed >= 10){
+        console.log(`[ Player closed: Problem with streaming played closed too many twices - ${currentDate()}]`);
+    }else{
+        launchCurrentStream()
+    }
 });
 //   ----- end events of player media -----
 
 //Se definen los parametros del player, url, volumen etc
 function launch(name, url){
-    player.launch( function(){
-        // se define el canal inicial cuando el reproductor se inicia
-        newStreaming(name,url)
-    });
+    let { current } = streamings
+    if( current.monitor.playerClosed >= 10){
+        console.log(`[ Player closed: Problem with streaming played closed too many twices - ${currentDate()} ]`);
+    }else{
+        player.launch( function(){
+            // se define el canal inicial cuando el reproductor se inicia
+            newStreaming(name,url)
+        });
+    }
 }
 
 // testear funcion
 function launchCurrentStream(){
     let { current, institutional } = streamings
-    if ( current.url === '' || current.name === '' ){
-        launch( institutional.name, institutional.url )
-    }else{
-        launch( current.name, current.url )
-    }
+    setTimeout(()=>{
+        if ( current.url === '' || current.name === '' ){
+            launch( institutional.name, institutional.url )
+        }else{
+            launch( current.name, current.url )
+        }
+    },10000)
 }
 
 function restartPlayer( reason ){
