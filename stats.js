@@ -10,7 +10,7 @@ async function writeStatusPlayer() {
     const content = await status();
     const { current } = streamings
     const channel = {
-      status: current.inbroadcast,
+      status: current.broadcast,
       name: current.name,
       url: current.url
     }

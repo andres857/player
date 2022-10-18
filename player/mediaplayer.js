@@ -3,42 +3,24 @@ const PlayerController = require('media-player-controller');
 const streamings = require('../streamings')
 const {currentDate} = require('../date')
 const { doPublishLaunchPlayer } = require('../broker/publication');
+const {data_streaming} = require('./monitoringStreaming')
 
 const player = new PlayerController({
     app: 'vlc',
-    args: ['--fullscreen', '--no-video-title-show'],//'--video-on-top'
-    // args: ['--video-on-top', '--no-video-title-show'],
+    args: [, '--no-video-title-show'],//'--video-on-top','--fullscreen'
     media: streamings.institutional.url
   });
 
 //   ----- events of player media -----
 // Data object with current playback event 
-player.on('playback', (d)=>{
-    if (process.env.APP_ENV === 'devel'){
-        console.log(d.value,'value')
-    }
-    streamings.current.monitor.time_pos = d.value
+player.on('playback', (data)=>{
+    console.log(data);
+    data_streaming.raw_player = data
 });
-
-function playerIsRunning(time_pos){
-    if (time_pos >= streamings.current.previous_time_pos){
-        console.log(`[ Player is running ]`);
-        streamings.current.previous_time_pos = time_pos
-        if (!streamings.current.inbroadcast){
-            streamings.current.inbroadcast = true
-        }
-        console.log(`[ Running player: current Time: ${time_pos} - previous Value: ${streamings.current.previous_time_pos}]`);
-    }else{
-        console.log(`[ Player stop the streaming]`);
-        if (streamings.current.inbroadcast){
-            streamings.current.inbroadcast = false
-        }
-    }
-}
 
 // Playback started and player can now be controlled
 player.on('playback-started',  async () => {
-    streamings.current.inbroadcast = true 
+    streamings.current.broadcast = true 
     console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ streamings.current.name } - ${ streamings.current.url } - ${currentDate()} ]`)
     //  colocar una bandera de reproduccion del reproductor multimedia
     await doPublishLaunchPlayer(streamings.current)
@@ -46,9 +28,10 @@ player.on('playback-started',  async () => {
 
 player.on('app-exit', async (code) => {
     let { current } = streamings
-    current.monitor.playerClosed + 1
+    current.monitor.playerClosed = current.monitor.playerClosed + 1
     console.log(`[ MEDIA PLAYER - player closed - ${currentDate()} - exit code: ${code} ] `);
-    if(current.monitor.playerClosed >= 10){
+    console.log(`Twices media played closed: ${current.monitor.playerClosed}`);
+    if(current.monitor.playerClosed >= 3){
         console.log(`[ Player closed: Problem with streaming played closed too many twices - ${currentDate()}]`);
     }else{
         launchCurrentStream()
@@ -59,7 +42,7 @@ player.on('app-exit', async (code) => {
 //Se definen los parametros del player, url, volumen etc
 function launch(name, url){
     let { current } = streamings
-    if( current.monitor.playerClosed >= 10){
+    if( current.monitor.playerClosed >= 3){
         console.log(`[ Player closed: Problem with streaming played closed too many twices - ${currentDate()} ]`);
     }else{
         player.launch( function(){
@@ -78,7 +61,7 @@ function launchCurrentStream(){
         }else{
             launch( current.name, current.url )
         }
-    },10000)
+    },3000)
 }
 
 function restartPlayer( reason ){
@@ -106,14 +89,13 @@ function updateStreaming( name, url){
 // Change the streaming and update object streaming
 function newStreaming(name, url){
     player.load( url, ()=>{
-        console.log(streamings.current.inbroadcast);
+        console.log(streamings.current.broadcast);
         console.log(`[ MEDIA PLAYER NUEVO STREAMING - Canal: ${name} - Url Streaming: ${url} - ${currentDate()} ]`);
         updateStreaming(name, url)
     })
 }
 
 module.exports = {
-    playerIsRunning,
     launch,
     changeVolume,
     newStreaming,

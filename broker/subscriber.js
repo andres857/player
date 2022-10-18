@@ -4,7 +4,6 @@ const { newStreaming } = require('../player/mediaplayer')
 const shutdown = require('../player/restart')
 const {doPublishStatusPlayer} = require('./publication')
 const {currentDate} = require('../date')
-const {playerIsRunning} = require('../player/mediaplayer')
 const streamings = require('../streamings')
 
 // susbcriber to all topics
@@ -45,10 +44,6 @@ clientMQTT.on('message', async function ( topic, payload ) {
                 });
         }else if(message.streaming.name !== "" && message.streaming.url !== ""){
             newStreaming( message.streaming.name, message.streaming.url )
-            setTimeout(() => {
-                console.log(`Saludos Set Time Out`);
-                playerIsRunning()
-            }, 5000);
         }else{
             console.log('peticiones no valida')
         }
