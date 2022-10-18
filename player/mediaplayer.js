@@ -14,10 +14,27 @@ const player = new PlayerController({
 //   ----- events of player media -----
 // Data object with current playback event 
 player.on('playback', (d)=>{
-    if (process.env.APP_ENV == 'devel'){
+    if (process.env.APP_ENV === 'devel'){
         console.log(d.value,'value')
     }
+    streamings.current.monitor.time_pos = d.value
 });
+
+function playerIsRunning(time_pos){
+    if (time_pos >= streamings.current.previous_time_pos){
+        console.log(`[ Player is running ]`);
+        streamings.current.previous_time_pos = time_pos
+        if (!streamings.current.inbroadcast){
+            streamings.current.inbroadcast = true
+        }
+        console.log(`[ Running player: current Time: ${time_pos} - previous Value: ${streamings.current.previous_time_pos}]`);
+    }else{
+        console.log(`[ Player stop the streaming]`);
+        if (streamings.current.inbroadcast){
+            streamings.current.inbroadcast = false
+        }
+    }
+}
 
 // Playback started and player can now be controlled
 player.on('playback-started',  async () => {
@@ -96,6 +113,7 @@ function newStreaming(name, url){
 }
 
 module.exports = {
+    playerIsRunning,
     launch,
     changeVolume,
     newStreaming,

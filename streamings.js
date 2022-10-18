@@ -28,7 +28,8 @@ streamings = {
     },
     monitor:{
       playerClosed: 0,
-      time_pos: ''
+      time_pos:'',
+      previous_time_pos: 0
     }
   } 
 }
