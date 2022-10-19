@@ -29,7 +29,11 @@ streamings = {
     monitor:{
       playerClosed: 0,
       time_pos:'',
-      previous_time_pos: 0
+      previous_time_pos: 0,
+      raw_player: 0,
+      time_player : 0,
+      time_pos_previous : 0,
+      count_closed_mediaplayer : 0
     }
   } 
 }

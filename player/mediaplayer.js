@@ -3,7 +3,8 @@ const PlayerController = require('media-player-controller');
 const streamings = require('../streamings')
 const {currentDate} = require('../date')
 const { doPublishLaunchPlayer } = require('../broker/publication');
-const {data_streaming} = require('./monitoringStreaming')
+const { streamingStarted, data_streaming } = require('./monitor')
+
 
 const player = new PlayerController({
     app: 'vlc',
@@ -20,10 +21,17 @@ player.on('playback', (data)=>{
 
 // Playback started and player can now be controlled
 player.on('playback-started',  async () => {
-    streamings.current.broadcast = true 
-    console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ streamings.current.name } - ${ streamings.current.url } - ${currentDate()} ]`)
-    //  colocar una bandera de reproduccion del reproductor multimedia
-    await doPublishLaunchPlayer(streamings.current)
+    setTimeout(async ()=>{
+        const data = data_streaming.raw_player
+        streamingStarted(data)
+        if(streamings.current.broadcast ){
+            console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ streamings.current.name } - ${ streamings.current.url } - ${currentDate()} ]`)
+            //  colocar una bandera de reproduccion del reproductor multimedia
+            await doPublishLaunchPlayer(streamings.current)
+        }else{
+            console.log(`Problemas con la reproduccion`);
+        }
+    },10000)
     });
 
 player.on('app-exit', async (code) => {

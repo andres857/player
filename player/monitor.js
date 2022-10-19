@@ -1,4 +1,5 @@
 const streamings  = require('../streamings')
+
 let data_streaming = {
     raw_player: 0,
     time_player : 0,
@@ -16,7 +17,7 @@ function streamingStarted(data){
             streamings.current.broadcast = true
             console.log(streamings.current);
         }
-    }, 10000); 
+    }, 5000); 
 }
 
 function playerIsRunning(time_pos){
