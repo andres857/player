@@ -1,46 +1,38 @@
-require('dotenv').config({ path: '~/player/.env'})
 const PlayerController = require('media-player-controller');
-const streamings = require('../streamings')
+const { institutional, current} = require('../streamings')
 const {currentDate} = require('../date')
 const { doPublishLaunchPlayer } = require('../broker/publication');
-const { streamingStarted, data_streaming } = require('./monitor')
 
 
 const player = new PlayerController({
     app: 'vlc',
-    args: [, '--no-video-title-show'],//'--video-on-top','--fullscreen'
-    media: streamings.institutional.url
+    args: ['--video-on-top','--fullscreen', '--no-video-title-show'],//
+    media: institutional.url
   });
 
 //   ----- events of player media -----
 // Data object with current playback event 
 player.on('playback', (data)=>{
-    console.log(data);
-    data_streaming.raw_player = data
+    current.monitor.time_pos = data.value
+    // console.log(current.monitor);
 });
 
 // Playback started and player can now be controlled
 player.on('playback-started',  async () => {
-    setTimeout(async ()=>{
-        const data = data_streaming.raw_player
-        streamingStarted(data)
-        if(streamings.current.broadcast ){
-            console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ streamings.current.name } - ${ streamings.current.url } - ${currentDate()} ]`)
-            //  colocar una bandera de reproduccion del reproductor multimedia
-            await doPublishLaunchPlayer(streamings.current)
-        }else{
-            console.log(`Problemas con la reproduccion`);
-        }
-    },10000)
-    });
+    console.log(`[ MEDIA PLAYER - EVENT - PLAYBACK - EL STREAMING A COMENZADO ]`);
+    current.monitor.count_closed_mediaplayer = 0
+    current.monitor.streaming_stop = 0
+    current.broadcast = true
+    current.monitor.previous_time_pos = current.monitor.time_pos
+    console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ current.name } - ${ current.url } - ${currentDate()} ]`)
+    await doPublishLaunchPlayer(current)
+});
 
 player.on('app-exit', async (code) => {
-    let { current } = streamings
-    current.monitor.playerClosed = current.monitor.playerClosed + 1
-    console.log(`[ MEDIA PLAYER - player closed - ${currentDate()} - exit code: ${code} ] `);
-    console.log(`Twices media played closed: ${current.monitor.playerClosed}`);
-    if(current.monitor.playerClosed >= 3){
-        console.log(`[ Player closed: Problem with streaming played closed too many twices - ${currentDate()}]`);
+    current.monitor.count_closed_mediaplayer = current.monitor.count_closed_mediaplayer + 1
+    console.log(`[ MEDIA PLAYER - EVENT CLOSED - ${currentDate()} - exit code: ${code}]`);
+    if( current.monitor.count_closed_mediaplayer >= current.monitor.limits.closed_mediaplayer){
+        console.log(`[ MEDIA PLAYER - Player closed: Problem with streaming, closed too many times - ${currentDate()}]`);
     }else{
         launchCurrentStream()
     }
@@ -49,15 +41,10 @@ player.on('app-exit', async (code) => {
 
 //Se definen los parametros del player, url, volumen etc
 function launch(name, url){
-    let { current } = streamings
-    if( current.monitor.playerClosed >= 3){
-        console.log(`[ Player closed: Problem with streaming played closed too many twices - ${currentDate()} ]`);
-    }else{
-        player.launch( function(){
-            // se define el canal inicial cuando el reproductor se inicia
-            newStreaming(name,url)
-        });
-    }
+    player.launch( function(){
+        console.log(`[LAUNCH - parametros iniciales del streaming]`);
+        newStreaming(name,url)
+    });
 }
 
 // testear funcion
@@ -72,11 +59,14 @@ function launchCurrentStream(){
     },3000)
 }
 
+
+
 function restartPlayer( reason ){
     player.quit( e => {
         if(e) return console.error(`[ Player - Error closing media player ${e.message} - ${currentDate()}] `);
         console.log(`[ Player - closing media player from ${reason} - ${currentDate()} ]`);
       })
+
     setTimeout(()=>{
         launchCurrentStream()
     },3000)
@@ -87,27 +77,31 @@ function changeVolume(volume, cb){
     cb()
 }
 
-// update the object streaming
-function updateStreaming( name, url){
-    streamings.current.name = name
-    streamings.current.url = url
-    console.log(`[ MEDIA PLAYER - Update the Current Channel - ${currentDate()} ]`);
-}
-
 // Change the streaming and update object streaming
 function newStreaming(name, url){
-    player.load( url, ()=>{
-        console.log(streamings.current.broadcast);
-        console.log(`[ MEDIA PLAYER NUEVO STREAMING - Canal: ${name} - Url Streaming: ${url} - ${currentDate()} ]`);
-        updateStreaming(name, url)
+    player.load( url, async ()=>{
+        console.log(`[ MEDIA PLAYER - EVENT - LOAD - ${currentDate()} ]`);
+        
+        current.name = name
+        current.url = url
+
+        // setTimeout(() => {
+        //     if(!current.broadcast){
+        //         console.log(`[ MEDIA PLAYER - Problemas con la reproduccion, intententado reconectar]`);
+        //         player.quit( e => {
+        //             if(e) return console.error(`[ Player - Error closing media player ${e.message} - ${currentDate()}] `);
+        //             console.log(`[ Player - closing media player`);
+        //         })
+        //     }
+        // }, 5000);
     })
 }
+
 
 module.exports = {
     launch,
     changeVolume,
     newStreaming,
-    updateStreaming,
     restartPlayer,
     player,
 }

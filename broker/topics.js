@@ -1,19 +1,17 @@
-require('dotenv').config({ path: '~/player/.env'})
 const { serial } = require('../player/info')
-
-const client = process.env.CLIENT
+const { customer } = require('../config')
 
 function buildTopics(){
     let id = serial()
     return {
         suscriber:{
-          players: `${client}/players`, //request global to all players
-          player: `${client}/player/${id}`, //request to player
+          players: `${customer.name}/players`, //request global to all players
+          player: `${customer.name}/player/${id}`, //request to player
         },
         publish:{
-          status: `${client}/player/status/${id}`,
-          response: `${client}/player/response/${id}`,
-          currentStreaming: `${client}/player/currentstreaming/${id}`
+          status: `${customer.name}/player/status/${id}`,
+          response: `${customer.name}/player/response/${id}`,
+          currentStreaming: `${customer.name}/player/currentstreaming/${id}`
         }
     }
 }

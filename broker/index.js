@@ -1,17 +1,12 @@
-require('dotenv').config({ path: '~/player/.env'})
 const mqtt = require('mqtt')
-const {serial} = require('../player/info') 
+const { connection_broker } = require('../config')
+const { serial } = require('../player/info') 
 
-const serverBroker = process.env.SERVERBROKER
-const portBroker = process.env.PORTBROKER
-const usernameBroker = process.env.USERNAME
-const passwordBroker = process.env.PASSWORD
-
-const clientMQTT  = mqtt.connect(`mqtt://${serverBroker}`,{
+const clientMQTT  = mqtt.connect(`mqtt://${connection_broker.serverBroker}`,{
   clientId: serial(),
-  port: portBroker,
-  username: usernameBroker,
-  password: passwordBroker,
+  port: connection_broker.portBroker,
+  username: connection_broker.usernameBroker,
+  password: connection_broker.passwordBroker,
   keepalive:60,
   clean:true,
   reconnectPeriod: 10000,

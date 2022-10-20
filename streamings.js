@@ -1,8 +1,9 @@
-require('dotenv').config({ path: '~/player/.env'})
+const { channels } = require('./config')
+
 streamings = {
   // channel by default
   institutional : {
-    url: process.env.URL_STREAMING_INSTITUCIONAL,
+    url: channels.institucional,
     name: 'Windows Channel TV',
     volume:{
       active:false,
@@ -10,8 +11,8 @@ streamings = {
     }
   },
   commercial : {
-    url: process.env.URL_STREAMING_COMERCIAL,
-    name: "Caracol", // Canal comercial por defecto,
+    url: channels.comercial,
+    name: "Caracol", 
     volume:{
       active:false,
       level:''
@@ -27,13 +28,14 @@ streamings = {
       level:''
     },
     monitor:{
-      playerClosed: 0,
       time_pos:'',
-      previous_time_pos: 0,
-      raw_player: 0,
-      time_player : 0,
-      time_pos_previous : 0,
-      count_closed_mediaplayer : 0
+      previous_time_pos:'',
+      count_closed_mediaplayer : 0,
+      streaming_stop: 0,
+      limits:{
+        streaming_stop: 3,
+        closed_mediaplayer: 7
+      }
     }
   } 
 }

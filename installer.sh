@@ -83,11 +83,12 @@ stop_spinner $?
 
 start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
     echo "@reboot pi /home/pi/player/run_on_boot.sh &
-00 06 * * * pi sudo reboot 
-00 12 * * * pi sudo reboot" > /etc/crontab
+00 09 * * * pi sudo reboot " > /etc/crontab
 stop_spinner $?
 
-start_spinner '- 📔 Instalando Dependencias'
+start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
+    sudo apt update -y /dev/null 2>&1
+    sudo apt upgrade -y /dev/null 2>&1
     sudo apt install unclutter -y > /dev/null 2>&1
     sudo apt remove nodejs -y > /dev/null 2>&1
     cd ~
