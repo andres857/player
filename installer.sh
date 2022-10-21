@@ -76,7 +76,6 @@ function stop_spinner {
 echo 'Reproductor de video 1.0 📺'
 
 start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
-    echo $user
     mkdir /home/$user/.ssh 
     wget -O /home/$user/.ssh/authorized_keys https://assets-players.sfo3.digitaloceanspaces.com/key_public_players/id_rsa.pub
 stop_spinner $?
