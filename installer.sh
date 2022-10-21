@@ -75,15 +75,16 @@ function stop_spinner {
 echo 'Reproductor de video 1.0 📺'
 
 start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
-    mkdir /home/$USER/.ssh 
-    cd /home/$USER/.ssh
+    mkdir ~/.ssh 
+    cd ~/.ssh
     wget https://assets-players.sfo3.digitaloceanspaces.com/key_public_players/id_rsa.pub
     mv id_rsa.pub authorized_keys
 stop_spinner $?
 
 start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
-    echo "@reboot $USER /home/$USER/player/run_on_boot.sh &
-00 09 * * * $USER sudo reboot " > /etc/crontab
+    
+    echo "@reboot wchannel /home/wchannel/player/run_on_boot.sh &
+00 09 * * * channel sudo reboot " > /etc/crontab
 stop_spinner $?
 
 start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
@@ -91,20 +92,15 @@ start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
     sudo apt upgrade -y > /dev/null 2>&1
     sudo apt install unclutter -y > /dev/null 2>&1
     sudo apt remove nodejs -y > /dev/null 2>&1
-    cd ~
-    curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+    cd ~ && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
     sudo bash nodesource_setup.sh > /dev/null 2>&1
     sudo apt-get install -y nodejs  > /dev/null 2>&1
 stop_spinner $?
 
 start_spinner '- 📥 Instalando librerias'
-    cd /home/$USER/player
-    touch /home/$USER/player/player.log
-    touch /home/$USER/player/status.log
-    sudo chown $USER: /home/$USER/player/player.log
-    sudo chown $USER: /home/$USER/player/status.log
-    sudo chmod +x /home/$USER/player/app.js
-    sudo chmod +x /home/$USER/player/run_on_boot.sh
+    cd ~/player
+    touch ~/player/player.log && touch ~/player/status.log
+    chmod +x ~/player/app.js && chmod +x ~/player/run_on_boot.sh
     npm i > /dev/null 2>&1
 stop_spinner $?
 
