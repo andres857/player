@@ -1,6 +1,7 @@
 #!/bin/bash
 # Author: Tasos Latsas
 
+read -p 'user: ' user
 function _spinner() {
     # $1 start/stop
     #
@@ -74,33 +75,35 @@ function stop_spinner {
 
 echo 'Reproductor de video 1.0 📺'
 
-start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
-    mkdir ~/.ssh 
-    cd ~/.ssh
-    wget https://assets-players.sfo3.digitaloceanspaces.com/key_public_players/id_rsa.pub
-    mv id_rsa.pub authorized_keys
-stop_spinner $?
+# start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
+#     echo $user
+#     mkdir /home/$user/.ssh 
+#     wget -O /home/$user/.ssh/authorized_keys https://assets-players.sfo3.digitaloceanspaces.com/key_public_players/id_rsa.pub
+# stop_spinner $?
 
-start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
-    
-    echo "@reboot wchannel /home/wchannel/player/run_on_boot.sh &
-00 09 * * * channel sudo reboot " > /etc/crontab
-stop_spinner $?
+# start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
+#     echo "@reboot $user /home/$user/player/run_on_boot.sh &
+# 00 09 * * * $user sudo reboot " > /etc/crontab
+# stop_spinner $?
 
-start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
-    sudo apt update -y > /dev/null 2>&1
-    sudo apt upgrade -y > /dev/null 2>&1
-    sudo apt install unclutter -y > /dev/null 2>&1
-    sudo apt remove nodejs -y > /dev/null 2>&1
-    cd ~ && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-    sudo bash nodesource_setup.sh > /dev/null 2>&1
-    sudo apt-get install -y nodejs  > /dev/null 2>&1
-stop_spinner $?
+# start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
+#     sudo apt update -y && sudo apt upgrade -y > /dev/null 2>&1
+#     sudo apt install unclutter -y > /dev/null 2>&1
+#     sudo apt remove nodejs -y > /dev/null 2>&1
+#     cd /home/$user && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+#     sudo bash nodesource_setup.sh > /dev/null 2>&1
+#     sudo apt-get install -y nodejs  > /dev/null 2>&1
+#     rm /home/$user/nodesource_setup.sh
+# stop_spinner $?
 
 start_spinner '- 📥 Instalando librerias'
-    cd ~/player
-    touch ~/player/player.log && touch ~/player/status.log
-    chmod +x ~/player/app.js && chmod +x ~/player/run_on_boot.sh
+    cd /home/$user/player
+    touch /home/$user/player/player.log && touch /home/$user/player/status.log
+    cp /home/$user/player/.env.example /home/$user/player/.env
+    chown $user: /home/$user/player/.env
+    chown $user: /home/$user/player/player.log
+    chown $user: /home/$user/player/status.log
+    chmod +x /home/$user/player/app.js && chmod +x /home/$user/player/run_on_boot.sh
     npm i > /dev/null 2>&1
 stop_spinner $?
 
