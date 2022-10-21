@@ -75,26 +75,26 @@ function stop_spinner {
 
 echo 'Reproductor de video 1.0 📺'
 
-# start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
-#     echo $user
-#     mkdir /home/$user/.ssh 
-#     wget -O /home/$user/.ssh/authorized_keys https://assets-players.sfo3.digitaloceanspaces.com/key_public_players/id_rsa.pub
-# stop_spinner $?
+start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
+    echo $user
+    mkdir /home/$user/.ssh 
+    wget -O /home/$user/.ssh/authorized_keys https://assets-players.sfo3.digitaloceanspaces.com/key_public_players/id_rsa.pub
+stop_spinner $?
 
-# start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
-#     echo "@reboot $user /home/$user/player/run_on_boot.sh &
-# 00 09 * * * $user sudo reboot " > /etc/crontab
-# stop_spinner $?
+start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
+    echo "@reboot $user /home/$user/player/run_on_boot.sh &
+00 09 * * * $user sudo reboot " > /etc/crontab
+stop_spinner $?
 
-# start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
-#     sudo apt update -y && sudo apt upgrade -y > /dev/null 2>&1
-#     sudo apt install unclutter -y > /dev/null 2>&1
-#     sudo apt remove nodejs -y > /dev/null 2>&1
-#     cd /home/$user && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-#     sudo bash nodesource_setup.sh > /dev/null 2>&1
-#     sudo apt-get install -y nodejs  > /dev/null 2>&1
-#     rm /home/$user/nodesource_setup.sh
-# stop_spinner $?
+start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
+    sudo apt update -y && sudo apt upgrade -y > /dev/null 2>&1
+    sudo apt install unclutter -y > /dev/null 2>&1
+    sudo apt remove nodejs -y > /dev/null 2>&1
+    cd /home/$user && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+    sudo bash nodesource_setup.sh > /dev/null 2>&1
+    sudo apt-get install -y nodejs  > /dev/null 2>&1
+    rm /home/$user/nodesource_setup.sh
+stop_spinner $?
 
 start_spinner '- 📥 Instalando librerias'
     cd /home/$user/player
