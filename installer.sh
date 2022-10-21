@@ -87,8 +87,8 @@ start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio d
 stop_spinner $?
 
 start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
-    sudo apt update -y /dev/null 2>&1
-    sudo apt upgrade -y /dev/null 2>&1
+    sudo apt update -y > /dev/null 2>&1
+    sudo apt upgrade -y > /dev/null 2>&1
     sudo apt install unclutter -y > /dev/null 2>&1
     sudo apt remove nodejs -y > /dev/null 2>&1
     cd ~
