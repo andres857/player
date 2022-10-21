@@ -75,15 +75,15 @@ function stop_spinner {
 echo 'Reproductor de video 1.0 📺'
 
 start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
-    mkdir /home/pi/.ssh 
-    cd /home/pi/.ssh
+    mkdir /home/$USER/.ssh 
+    cd /home/$USER/.ssh
     wget https://assets-players.sfo3.digitaloceanspaces.com/key_public_players/id_rsa.pub
     mv id_rsa.pub authorized_keys
 stop_spinner $?
 
 start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
-    echo "@reboot pi /home/pi/player/run_on_boot.sh &
-00 09 * * * pi sudo reboot " > /etc/crontab
+    echo "@reboot $USER /home/$USER/player/run_on_boot.sh &
+00 09 * * * $USER sudo reboot " > /etc/crontab
 stop_spinner $?
 
 start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
@@ -98,13 +98,13 @@ start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
 stop_spinner $?
 
 start_spinner '- 📥 Instalando librerias'
-    cd /home/pi/player
-    touch /home/pi/player/player.log
-    touch /home/pi/player/status.log
-    sudo chown pi: /home/pi/player/player.log
-    sudo chown pi: /home/pi/player/status.log
-    sudo chmod +x /home/pi/player/app.js
-    sudo chmod +x /home/pi/player/run_on_boot.sh
+    cd /home/$USER/player
+    touch /home/$USER/player/player.log
+    touch /home/$USER/player/status.log
+    sudo chown $USER: /home/$USER/player/player.log
+    sudo chown $USER: /home/$USER/player/status.log
+    sudo chmod +x /home/$USER/player/app.js
+    sudo chmod +x /home/$USER/player/run_on_boot.sh
     npm i > /dev/null 2>&1
 stop_spinner $?
 
