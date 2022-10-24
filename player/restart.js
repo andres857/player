@@ -7,7 +7,3 @@ module.exports = function shutdown(callback){
                 callback(stdout);
         });
 }
-
-// module.exports={
-// 	shutdown
-// }

@@ -15,9 +15,13 @@ const channels = {
 const customer = {
     name: process.env.CLIENT
 }
+const hostname = {
+    name: process.env.HOSTNAME
+}
 
 module.exports ={
     connection_broker,
     channels,
-    customer
+    customer,
+    hostname
 }

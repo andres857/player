@@ -1,5 +1,7 @@
 const si = require('systeminformation')
 const os = require('os')
+const { exec } = require('child_process');
+
 
 async function status() {
     try {
@@ -16,19 +18,48 @@ async function status() {
 
 async function interfaces(){
   const networks = os.networkInterfaces()
+  console.log(networks);
   return networks
 }
 
 async function info(){
-  let info = await si.osInfo()
-  return info
+  try {
+    let info = await si.osInfo()
+    let { node, npm } = await si.versions()
+    let [ user ] = await si.users()
+    const infoPlayer = {
+      info,
+      user,
+      node:{
+        version: node,
+        npm: npm
+      }
+    }
+    return infoPlayer
+  } catch (error) {
+    console.log(`[ INFO PLAYER - error obteniendo la info del player - ${error}]`);
+  }
 }
 
 function serial(){
     const networks = os.networkInterfaces()
-    let { mac } = networks.eth0[0]
-    let serial =  mac.replace(/:/g, '');
+    const { mac } = networks.hasOwnProperty('wlan0') ? networks.wlan0[0] : networks.eth0[1]
+    const serial = mac.replace(/:/g, '');
     return serial.slice(-6)
+}
+
+function signalWifi(){
+  exec('iwconfig', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`error: ${error.message}`);
+      return;
+    }else{
+      const signalLevel = stdout.slice(317, 329)
+      console.log(rta);
+      let rta = signalLevel.split('=')
+      return rta
+    }
+  });
 }
 
 module.exports = {
@@ -36,4 +67,5 @@ module.exports = {
     interfaces,
     info,
     serial,
+    signalWifi
 }
