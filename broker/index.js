@@ -1,9 +1,9 @@
 const mqtt = require('mqtt')
 const { connection_broker } = require('../config')
-const { serial } = require('../player/info') 
+const { player } = require('../config')
 
 const clientMQTT  = mqtt.connect(`mqtt://${connection_broker.serverBroker}`,{
-  clientId: serial(),
+  clientId: player.serial,
   port: connection_broker.portBroker,
   username: connection_broker.usernameBroker,
   password: connection_broker.passwordBroker,
@@ -16,7 +16,7 @@ const clientMQTT  = mqtt.connect(`mqtt://${connection_broker.serverBroker}`,{
 
 clientMQTT.on('connect', function () {
     console.log(`[ BROKER - Player connection successfull to broker ]`);
-  })
+})
 
 module.exports = clientMQTT
 

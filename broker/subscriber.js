@@ -8,24 +8,16 @@ const streamings = require('../streamings')
 
 // susbcriber to all topics
 function subscriber(){
-    return new Promise((resolve) => {
-        const { suscriber } = buildTopics()
-        console.log( suscriber );
-        resolve(
-            setTimeout(()=>{
-                for (let topic in suscriber) {
-                    clientMQTT.subscribe(suscriber[topic], function (err) {
-                        if (!err) {
-                            console.log(`[ BROKER - Client subscriber to topic ${suscriber[topic]}- ${currentDate()}]`);
-                        }else{
-                            console.log(`[ BROKER - Error en la suscripcion - ${currentDate()}]`);
-                            console.log(err);
-                        }
-                    })
-                }
-            },5000)
-        )
-    })
+    const { suscriber } = buildTopics()
+    for (let topic in suscriber) {
+        clientMQTT.subscribe(suscriber[topic], function (err) {
+            if (!err) {
+                console.log(`[ BROKER - Client subscriber to topic ${suscriber[topic]}- ${currentDate()}]`);
+            }else{
+                console.log(`[ BROKER - Error en la suscripcion - ${currentDate()}]`);
+            }
+        })
+    }
 }
 
 // event listen messages from broker
@@ -65,7 +57,6 @@ clientMQTT.on('message', async function ( topic, payload ) {
         // }
     }
 })
-
 
 module.exports={
     subscriber

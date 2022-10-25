@@ -1,17 +1,16 @@
-const { serial } = require('../player/info')
+const { player } = require('../config')
 const { customer } = require('../config')
 
 function buildTopics(){
-    let id = serial()
     return {
         suscriber:{
           players: `${customer.name}/players`, //request global to all players
-          player: `${customer.name}/player/${id}`, //request to player
+          player: `${customer.name}/player/${player.serial}`, //request to player
         },
         publish:{
-          status: `${customer.name}/player/status/${id}`,
-          response: `${customer.name}/player/response/${id}`,
-          currentStreaming: `${customer.name}/player/currentstreaming/${id}`
+          status: `${customer.name}/player/status/${player.serial}`,
+          response: `${customer.name}/player/response/${player.serial}`,
+          currentStreaming: `${customer.name}/player/currentstreaming/${player.serial}`
         }
     }
 }

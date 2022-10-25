@@ -15,13 +15,14 @@ const channels = {
 const customer = {
     name: process.env.CLIENT
 }
-const hostname = {
-    name: process.env.HOSTNAME
+const player = {
+    hostname: process.env.HOSTNAME,
+    serial: ''
 }
 
 module.exports ={
     connection_broker,
     channels,
     customer,
-    hostname
+    player
 }

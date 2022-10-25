@@ -4,7 +4,7 @@ const { status } = require('./player/info')
 const { currentDateForStats } = require('./date')
 const streamings = require('./streamings')
 const { playerIsRunning } = require('./player/monitor')
-const {hostname} = require('./config')
+const {player} = require('./config')
 const running = true
 
 async function writeStatusPlayer() {
@@ -19,7 +19,7 @@ async function writeStatusPlayer() {
     const arrContent = Object.values(content)
     const arrStreaming = Object.values(channel)
     playerIsRunning(streamings.current.monitor.time_pos)
-    await fs.writeFile(`/home/${hostname.name}/player/status.log`, arrContent + ',' + currentDateForStats() + "," + arrStreaming + os.EOL , { flag: 'a+' } );
+    await fs.writeFile(`/home/${player.hostname}/player/status.log`, arrContent + ',' + currentDateForStats() + "," + arrStreaming + os.EOL , { flag: 'a+' } );
   } catch (err) {
     console.log(err);
   }

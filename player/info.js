@@ -41,11 +41,10 @@ async function info(){
   }
 }
 
-function serial(){
-    const networks = os.networkInterfaces()
-    const { mac } = networks.hasOwnProperty('wlan0') ? networks.wlan0[0] : networks.eth0[1]
-    const serial = mac.replace(/:/g, '');
-    return serial.slice(-6)
+async function serial(){
+    const {os} = await si.uuid()
+    const serial = os.replace(/:/g, '');
+    return serial.slice(0,8)
 }
 
 function signalWifi(){
