@@ -1,29 +1,24 @@
-const {run} = require('./index')
-const {buildTopics} = require('./topics')
 
-let client = null
-
-async function doSubscriber(){
+async function doSubscriber(client,topics){
     try {
-        client = await run()
-        const {suscriber} = await buildTopics()
-        for (let topic in suscriber) {
-            await client.subscribe(suscriber[topic])
-            console.log(`[ BROKER - Client subscriber to topic ${suscriber[topic]} ]`);
+        // client = await run()
+        // const {suscriber} = await buildTopics()
+        for (let topic in topics) {
+            await client.subscribe(topics[topic])
+            console.log(`[ BROKER - Client subscriber to topic ${topics[topic]} ]`);
         }
-    return client
+        return client
     } catch (error) {
         console.log(`[ Error - error subscriber to topics ]`);
     }
-    
 }
 
- function receiverMessages(client){
+function receiverMessages(client,topic){
     console.log('function receiver messages s');
     client.on('message', async function ( topic, payload ) {
       let message = JSON.parse( payload )
       console.log(message);
-      let { suscriber } = await buildTopics()
+    //   let { suscriber } = await buildTopics()
       console.log(suscriber);
       console.log(`[ Broker - received from topic ${topic} : the message ${payload.toString()} ]`)
   
@@ -41,7 +36,6 @@ async function doSubscriber(){
           }
       }})
 }
-
 
 module.exports = {
     doSubscriber,

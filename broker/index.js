@@ -1,7 +1,6 @@
 const MQTT = require("async-mqtt");
 const {connection_broker} = require("../config")
 const {serial} = require('../utils')
-const {doSubscriber,receiverMessages} = require('./subscriber') 
 
 let client = null
 
@@ -25,9 +24,8 @@ async function connectBroker() {
     } catch (error) {
       console.log(`[ BROKER - error connecting to broker - ${error}]`);
     }
-
-  }
+}
 
 module.exports = {
-    run
+  connectBroker
 }

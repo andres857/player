@@ -10,4 +10,6 @@ async function doPublish(){
     }
 }
 
-doPublish()
+module.exports = {
+    doPublish
+}
