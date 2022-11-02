@@ -1,7 +1,4 @@
-const { run } = require('./index')
-
-async function doPublish(){
-    const client = await run()
+async function doPublish(client){
     try {
         await client.publish("wc/player", "It works!");
     } catch (e){
