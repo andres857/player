@@ -1,17 +1,27 @@
-const clientMQTT = require('./index')
 const { buildTopics } = require('../broker/topics')
 const { status } = require('../player/info')
 const {currentDate} = require('../date')
 const { current } = require('../streamings')
+const {getSerial} = require('../player/info')
 
 
-function doPublishResponse(topic,message){
-    clientMQTT.publish(topic, message)
+
+async function doPublish(client){
+    try {
+        await client.publish("wc/player", "It works!");
+    } catch (e){
+        console.log(e.stack);
+        process.exit();
+    }
 }
 
-async function doPublishLaunchPlayer(currentStreaming){
+async function doPublishResponse(client, topic, message){
+    await client.publish(topic, message)
+}
+
+async function doPublishLaunchPlayer(client, currentStreaming){
     let { publish } =  buildTopics()
-    clientMQTT.publish( publish.currentStreaming, JSON.stringify(currentStreaming), {
+    await client.publish( publish.currentStreaming, JSON.stringify(currentStreaming), {
         qos:2, 
         retain:true
     },()=>{
@@ -19,24 +29,27 @@ async function doPublishLaunchPlayer(currentStreaming){
     })
 }
 
-async function doPublishStatusPlayer(){
-    const { publish } = buildTopics()
+async function doPublishStatusPlayer(client){
+    const serial = await getSerial()
+    const { publish } = await buildTopics(serial)
+    console.log(publish);
     const statusPlayer = await status()
     const payload = {
         statusPlayer,
         current
     } 
-    clientMQTT.publish( publish.status, JSON.stringify(payload), { 
+    await client.publish( publish.status, JSON.stringify(payload), { 
         qos:2, 
         retain:true 
     }, ()=>{
         console.table(payload)
         console.log(`${currentDate()}`);
     })
-  }
+}
 
 // the function that publish the status player is in file ~/player/player/idplayer.js
 module.exports = {
+    doPublish,
     doPublishResponse,
     doPublishLaunchPlayer,
     doPublishStatusPlayer

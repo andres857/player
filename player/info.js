@@ -41,10 +41,9 @@ async function info(){
   }
 }
 
-async function serial(){
-    const {os} = await si.uuid()
-    const serial = os.replace(/:/g, '');
-    return serial.slice(0,8)
+async function getSerial(){
+  const {os} = await si.uuid()
+  return os.slice(0,8)
 }
 
 function signalWifi(){
@@ -65,6 +64,6 @@ module.exports = {
     status,
     interfaces,
     info,
-    serial,
+    getSerial,
     signalWifi
 }

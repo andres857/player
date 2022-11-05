@@ -1,65 +1,65 @@
-const clientMQTT = require ('./index')
-const { buildTopics } = require('./topics')
 const { newStreaming } = require('../player/mediaplayer')
 const shutdown = require('../player/restart')
 const {doPublishStatusPlayer} = require('./publication')
 const {currentDate} = require('../date')
 const streamings = require('../streamings')
 
-// susbcriber to all topics
-function subscriber(){
-    const { suscriber } = buildTopics()
-    for (let topic in suscriber) {
-        clientMQTT.subscribe(suscriber[topic], function (err) {
-            if (!err) {
-                console.log(`[ BROKER - Client subscriber to topic ${suscriber[topic]}- ${currentDate()}]`);
-            }else{
-                console.log(`[ BROKER - Error en la suscripcion - ${currentDate()}]`);
-            }
-        })
+function evaluate(action){
+    options = {
+        restart: function(){
+            // shutdown(function(output){
+            //     console.log(` Reiniciando player topic global - ${currentDate()} `);
+            //     console.log(output);
+            // });
+            console.log('Simulando reinicio del dispositivo');
+        },
+        status: function(){
+            console.log('Simulando publiacion en el broker');
+            // await doPublishStatusPlayer(client)
+        },
+        streaming: function(){
+            console.log('Simulando cambio de streaming');
+        },
+        nothing: function(){
+            console.log('Nada para hacer');
+        }
+    }
+    const execute = options[action] ??  options['nothing'];
+    execute()
+}
+
+
+async function doSubscriber(client,topics){
+    try {
+        for (let topic in topics) {
+            await client.subscribe(topics[topic])
+            console.log(`[ BROKER - Client subscriber to topic ${topics[topic]} ]`);
+        }
+        return client
+    } catch (error) {
+        console.log(`[ Error - error subscriber to topics ]`);
     }
 }
 
-// event listen messages from broker
-clientMQTT.on('message', async function ( topic, payload ) {
+async function receiverMessages(client,topics_subscriber){
+    client.on('message', async function ( topic, payload ) {
     let message = JSON.parse( payload )
-    console.log(message);
-    let { suscriber } = buildTopics()
-    console.log(suscriber);
-    console.log(`[ Broker - received from topic ${topic} : the message ${payload.toString()} - ${currentDate()} ]`)
-
-    if ( topic === suscriber.players) {
-        if( message.restart === 'device' ){
-        shutdown(function(output){
-                    console.log(` Reiniciando player topic global - ${currentDate()} `);
-                    console.log(output);
-                });
-        }else if(message.streaming.name !== "" && message.streaming.url !== ""){
-            newStreaming( message.streaming.name, message.streaming.url )
-        }else{
-            console.log('peticiones no valida')
-        }
-    }else if ( topic === suscriber.player ) {
-        if (message.status === 'device'){
-            await doPublishStatusPlayer()
-        }
-        // let { actions } = message
-        // console.log(actions);
-        // if(actions.restart){
-        //     shutdown(function(output){
-        //         console.log(` Reiniciando player - ${currentDate()} `);
-        //         console.log(output);
-        //     });
-        // }else if(actions.status){
-        //     await doPublishStatusPlayer()
-        // }else if(actions.newstreaming.name != '' && actions.newstreaming.url != ''){
-        //     newStreaming( actions.newstreaming.name, actions.newstreaming.url )
-        // }
-    }
-})
+    console.log(`[ Broker - received from topic ${topic} : the message ${message} ]`)
+    if( topic === topics_subscriber.player ){
+            console.log('hola mundo');
+            console.log(message);
+            // evaluate(message)
+          
+        }else if( topic === topics_subscriber.players ){
+            let k = Object.keys(message) 
+            evaluate(k[0])
+        } 
+    })
+}
 
 module.exports={
-    subscriber
+    doSubscriber,
+    receiverMessages
 }
 
 

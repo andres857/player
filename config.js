@@ -1,7 +1,7 @@
 require('dotenv').config({ path: '~/player/.env'})
 
 const connection_broker = {
-    serverBroker : process.env.SERVERBROKER,
+    server : process.env.SERVERBROKER,
     portBroker : process.env.PORTBROKER,
     usernameBroker : process.env.USERNAME,
     passwordBroker : process.env.PASSWORD,

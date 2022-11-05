@@ -1,24 +1,39 @@
 #!/usr/bin/node
 const streamings = require('./streamings')
 const { launch } = require('./player/mediaplayer')
-const {serial} = require('./player/info')
-const { subscriber } = require('./broker/subscriber')
+const { buildTopics } = require('./broker/topics')
+const { connectBroker } = require('./broker/')
+const { doSubscriber, receiverMessages } = require('./broker/subscriber')
+const {doPublish} = require('./broker/publication')
+const { getSerial } = require('./player/info')
 const { player } = require('./config')
+
+
+
 require('./player/monitor').monitoringStreaming()
 require('./stats').loopStatus()
 
+
 async function main(){
     try {
-        serial().then( async (serial)=>{
-            player.serial = serial
-            await subscriber()
-        }).catch(e => console.log(e))
-        
-        await launch( streamings.institutional.name, streamings.institutional.url)
-        } catch (error) {
-            console.log(error);
-                console.log(`Error lanzando el reproductor ${error}`);
-        } 
+        const serial = await getSerial()
+        const {suscriber} = await buildTopics(serial)
+        const client = await connectBroker(serial)
+
+        doSubscriber(client,suscriber).then((client)=>{
+            receiverMessages(client, suscriber).then(()=>{
+                console.log('[ PLAYER - ready for receiver messages from broker ]');
+                doPublish(client).then(()=> console.log('publish success'))
+            })
+        }).catch((e)=>{
+            console.log(e);
+        })
+        // await launch( streamings.institutional.name, streamings.institutional.url)
+
+    } catch (error) {
+        console.log('-----------+++++++++++-----------');
+        console.log(error);
+    }
 }
 
 main()
