@@ -3,6 +3,7 @@ const shutdown = require('../player/restart')
 const {doPublishStatusPlayer} = require('./publication')
 const {currentDate} = require('../date')
 const streamings = require('../streamings')
+const mediaplayer = require('../player/info')
 
 function evaluate(action){
     options = {
@@ -13,12 +14,24 @@ function evaluate(action){
             // });
             console.log('Simulando reinicio del dispositivo');
         },
-        status: function(){
-            console.log('Simulando publiacion en el broker');
-            // await doPublishStatusPlayer(client)
+        status: async function(){
+            const statusmp = await mediaplayer.status()
+            console.log(statusmp);
         },
         streaming: function(){
-            console.log('Simulando cambio de streaming');
+            console.log('Simulando nuevo streaming');
+        },
+        interfaces: async function(){
+            const networkmp = await mediaplayer.interfaces()
+            console.log(networkmp)
+        },
+        info: async function(){
+            const infomp = await mediaplayer.info()
+            console.log(infomp);
+        },
+        node: async function(){
+            const nodemp = await mediaplayer.nodeversion()
+            console.log(nodemp);
         },
         nothing: function(){
             console.log('Nada para hacer');
@@ -27,7 +40,6 @@ function evaluate(action){
     const execute = options[action] ??  options['nothing'];
     execute()
 }
-
 
 async function doSubscriber(client,topics){
     try {
@@ -47,15 +59,14 @@ async function receiverMessages(client,topics_subscriber){
     console.log(`[ Broker - received from topic ${topic} : the message ${message} ]`)
     if( topic === topics_subscriber.player ){
             console.log('hola mundo');
-            console.log(message);
-            // evaluate(message)
-          
+            console.log(message);          
         }else if( topic === topics_subscriber.players ){
-            let k = Object.keys(message) 
+            let k = Object.values(message) 
             evaluate(k[0])
         } 
     })
 }
+
 
 module.exports={
     doSubscriber,

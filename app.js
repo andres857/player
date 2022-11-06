@@ -8,8 +8,6 @@ const {doPublish} = require('./broker/publication')
 const { getSerial } = require('./player/info')
 const { player } = require('./config')
 
-
-
 require('./player/monitor').monitoringStreaming()
 require('./stats').loopStatus()
 

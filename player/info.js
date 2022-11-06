@@ -18,22 +18,16 @@ async function status() {
 
 async function interfaces(){
   const networks = os.networkInterfaces()
-  console.log(networks);
   return networks
 }
 
 async function info(){
   try {
     let info = await si.osInfo()
-    let { node, npm } = await si.versions()
     let [ user ] = await si.users()
     const infoPlayer = {
       info,
-      user,
-      node:{
-        version: node,
-        npm: npm
-      }
+      user
     }
     return infoPlayer
   } catch (error) {
@@ -41,9 +35,21 @@ async function info(){
   }
 }
 
+async function nodeversion(){
+  try {
+    let { node, npm } = await si.versions()
+    return {
+      node:node,
+      npm: npm
+    }
+  } catch (error) {
+    console.log(`[ INFO PLAYER - error obteniendo la version de node y npm - ${error}]`);
+  }
+}
+
 async function getSerial(){
-  const {os} = await si.uuid()
-  return os.slice(0,8)
+  const {serial} = await si.system()
+  return serial.substring(serial.length -8)
 }
 
 function signalWifi(){
@@ -64,6 +70,8 @@ module.exports = {
     status,
     interfaces,
     info,
+    nodeversion,
     getSerial,
     signalWifi
 }
+
