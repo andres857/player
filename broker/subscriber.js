@@ -1,4 +1,5 @@
 const shutdown = require('../player/restart')
+const {newStreaming} =require('../player/mediaplayer')
 const {doPublishStatusPlayer,
     doPublishStreamingPlayer,
     doPublishInterfaces,
@@ -56,10 +57,15 @@ async function receiverMessages(client,topics_subscriber){
     console.log(`[ Broker - received from topic ${topic} : the message ${message} ]`)
     if( topic === topics_subscriber.player ){
             console.log('hola mundo');
-            console.log(message);          
+            console.log(message.has);          
         }else if( topic === topics_subscriber.players ){
-            let k = Object.values(message) 
-            evaluate(k[0])
+            if(message.hasOwnProperty('newstreaming')){
+                console.log('nuevo streaming recibido');
+                newStreaming(message.name,message.url)
+            }else{
+                let k = Object.values(message) 
+                evaluate(k[0])
+            }
         } 
     })
 }

@@ -82,19 +82,8 @@ function changeVolume(volume, cb){
 function newStreaming(name, url){
     player.load( url, async ()=>{
         console.log(`[ MEDIA PLAYER - EVENT - LOAD - ${currentDate()} ]`);
-        
         current.name = name
         current.url = url
-
-        // setTimeout(() => {
-        //     if(!current.broadcast){
-        //         console.log(`[ MEDIA PLAYER - Problemas con la reproduccion, intententado reconectar]`);
-        //         player.quit( e => {
-        //             if(e) return console.error(`[ Player - Error closing media player ${e.message} - ${currentDate()}] `);
-        //             console.log(`[ Player - closing media player`);
-        //         })
-        //     }
-        // }, 5000);
     })
 }
 
