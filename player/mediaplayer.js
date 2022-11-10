@@ -33,6 +33,10 @@ player.on('app-exit', async (code) => {
     console.log(`[ MEDIA PLAYER - EVENT CLOSED - ${currentDate()} - exit code: ${code}]`);
     if( current.monitor.count_closed_mediaplayer >= current.monitor.limits.closed_mediaplayer){
         console.log(`[ MEDIA PLAYER - Player closed: Problem with streaming, closed too many times - ${currentDate()}]`);
+        current.broadcast = false
+        current.monitor.limits.reached = true
+        current.message = '[ MEDIA PLAYER - Player closed: Problem with streaming, closed too many times ]'
+        await doPublishLaunchPlayer(current)
     }else{
         launchCurrentStream()
     }
@@ -47,7 +51,6 @@ function launch(name, url){
     });
 }
 
-// testear funcion
 function launchCurrentStream(){
     let { current, institutional } = streamings
     setTimeout(()=>{
@@ -58,8 +61,6 @@ function launchCurrentStream(){
         }
     },3000)
 }
-
-
 
 function restartPlayer( reason ){
     player.quit( e => {

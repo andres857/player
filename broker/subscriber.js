@@ -1,37 +1,34 @@
-const { newStreaming } = require('../player/mediaplayer')
 const shutdown = require('../player/restart')
-const {doPublishStatusPlayer} = require('./publication')
+const {doPublishStatusPlayer,
+    doPublishStreamingPlayer,
+    doPublishInterfaces,
+    doPublishInfoPlayer,
+    doPublishNode} = require('./publication')
 const {currentDate} = require('../date')
-const streamings = require('../streamings')
-const mediaplayer = require('../player/info')
+
 
 function evaluate(action){
     options = {
         restart: function(){
-            // shutdown(function(output){
-            //     console.log(` Reiniciando player topic global - ${currentDate()} `);
-            //     console.log(output);
-            // });
-            console.log('Simulando reinicio del dispositivo');
+            shutdown(function(output){
+                console.log(` Reiniciando player topic global - ${currentDate()} `);
+                console.log(output);
+            });
         },
         status: async function(){
-            const statusmp = await mediaplayer.status()
-            console.log(statusmp);
+            await doPublishStatusPlayer()
         },
-        streaming: function(){
-            console.log('Simulando nuevo streaming');
+        streaming: async function(){
+            await doPublishStreamingPlayer()
         },
         interfaces: async function(){
-            const networkmp = await mediaplayer.interfaces()
-            console.log(networkmp)
+            await doPublishInterfaces()
         },
         info: async function(){
-            const infomp = await mediaplayer.info()
-            console.log(infomp);
+            await doPublishInfoPlayer()
         },
         node: async function(){
-            const nodemp = await mediaplayer.nodeversion()
-            console.log(nodemp);
+            await doPublishNode()
         },
         nothing: function(){
             console.log('Nada para hacer');

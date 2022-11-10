@@ -17,6 +17,8 @@ const customer = {
 }
 const player = {
     hostname: process.env.HOSTNAME,
+    time_write_stats: process.env.TIMEWRITESTATS,
+    time_monitor_streaming: process.env.TIMEMONITORING,
     serial: ''
 }
 

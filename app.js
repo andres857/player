@@ -21,12 +21,11 @@ async function main(){
         doSubscriber(client,suscriber).then((client)=>{
             receiverMessages(client, suscriber).then(()=>{
                 console.log('[ PLAYER - ready for receiver messages from broker ]');
-                doPublish(client).then(()=> console.log('publish success'))
             })
         }).catch((e)=>{
             console.log(e);
         })
-        // await launch( streamings.institutional.name, streamings.institutional.url)
+        await launch( streamings.institutional.name, streamings.institutional.url)
 
     } catch (error) {
         console.log('-----------+++++++++++-----------');
