@@ -27,7 +27,7 @@ function monitoringStreaming(){
     setInterval(() => {
         console.log('monitoriando el streaming');
         playerIsRunning(current.monitor.time_pos)
-    }, player.time_monitor_streaming);
+    }, 300000);
 }
 
 module.exports = {

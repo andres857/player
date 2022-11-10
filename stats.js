@@ -30,7 +30,7 @@ async function delay(ms) {
 }
 
 async function run(){
-  await delay(player.time_write_stats)
+  await delay(600000)
   await writeStatusPlayer()
 }
 
