@@ -34,8 +34,7 @@ streamings = {
       streaming_stop: 0,
       limits:{
         streaming_stop: 3,
-        closed_mediaplayer: 5,
-        reached: false
+        closed_mediaplayer: 5
       }
     }
   } 

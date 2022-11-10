@@ -19,7 +19,6 @@ const player = {
     hostname: process.env.HOSTNAME,
     serial: ''
 }
-// console.log(typeof(player.time_write_stats));
 
 module.exports ={
     connection_broker,

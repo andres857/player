@@ -11,7 +11,7 @@ function playerIsRunning(time_pos){
         console.log(`[ MONITOR - Player stop streaming - ${currentDate()}]`);
         current.monitor.streaming_stop = current.monitor.streaming_stop + 1
         current.broadcast = false
-        if (current.monitor.streaming_stop >= current.monitor.limits.streaming_stop || !current.monitor.limits.reached){
+        if (current.monitor.streaming_stop >= current.monitor.limits.streaming_stop){
             player.quit( e => {
                 if(e){
                     console.error(`[ MONITOR - Error closing media player ${e.message} - ${currentDate()}] `);
