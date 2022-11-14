@@ -61,7 +61,7 @@ async function receiverMessages(client,topics_subscriber){
         }else if( topic === topics_subscriber.players ){
             if(message.hasOwnProperty('newstreaming')){
                 console.log('nuevo streaming recibido');
-                newStreaming(message.name,message.url)
+                newStreaming(message.name,message.url,message.volume)
             }else{
                 let k = Object.values(message) 
                 evaluate(k[0])

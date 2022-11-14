@@ -28,12 +28,14 @@ async function main(){
         await launch( streamings.institutional.name, streamings.institutional.url)
 
     } catch (error) {
-        console.log('-----------+++++++++++-----------');
         console.log(error);
     }
 }
-
 main()
+
+
+
+
 
 
 

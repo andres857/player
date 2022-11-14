@@ -79,11 +79,16 @@ function changeVolume(volume, cb){
 }
 
 // Change the streaming and update object streaming
-function newStreaming(name, url){
-    player.load( url, async ()=>{
+function newStreaming(name, url, volume){
+    console.log(volume);
+    const volumen = volume || 1
+    player.load( url, ()=>{
         console.log(`[ MEDIA PLAYER - EVENT - LOAD - ${currentDate()} ]`);
         current.name = name
         current.url = url
+        player.setVolume(volumen,()=>{
+            console.log(` level volumen = ${volumen} `);
+        })
     })
 }
 

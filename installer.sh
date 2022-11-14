@@ -81,8 +81,11 @@ start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
 stop_spinner $?
 
 start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
-    echo "@reboot $user /home/$user/player/run_on_boot.sh &
-00 09 * * * $user sudo reboot " > /etc/crontab
+    mkdir /home/$user/.config/autostart
+      echo "[Desktop Entry]
+  Type=Application
+  Name=mediaplayer
+  Exec=/usr/bin/bash /home/mediaplayer/player/run_on_boot.sh" > /home/winbox/.config/autostart/winbox.desktop
 stop_spinner $?
 
 start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
