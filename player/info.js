@@ -1,6 +1,7 @@
 const si = require('systeminformation')
 const os = require('os')
 const { exec } = require('child_process');
+const { log } = require('console');
 
 
 async function status() {
@@ -48,7 +49,8 @@ async function nodeversion(){
 }
 
 async function getSerial(){
-  const {serial} = await si.system()
+  const info = await si.osInfo()
+  const serial = info.serial
   return serial.substring(serial.length -8)
 }
 
