@@ -80,16 +80,9 @@ start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
     wget -O /home/$user/.ssh/authorized_keys https://assets-players.sfo3.digitaloceanspaces.com/key_public_players/id_rsa.pub
 stop_spinner $?
 
-start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
-    mkdir /home/$user/.config/autostart
-      echo "[Desktop Entry]
-  Type=Application
-  Name=mediaplayer
-  Exec=/usr/bin/bash /home/mediaplayer/player/run_on_boot.sh" > /home/winbox/.config/autostart/winbox.desktop
-stop_spinner $?
-
 start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
-    sudo apt update -y && sudo apt upgrade -y > /dev/null 2>&1
+    sudo apt update -y > /dev/null 2>&1
+    sudo apt upgrade -y  > /dev/null 2>&1
     sudo apt install unclutter -y > /dev/null 2>&1
     sudo apt remove nodejs -y > /dev/null 2>&1
     cd /home/$user && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
@@ -107,6 +100,14 @@ start_spinner '- 📥 Instalando librerias'
     chown $user: /home/$user/player/status.log
     chmod +x /home/$user/player/app.js && chmod +x /home/$user/player/run_on_boot.sh
     npm i > /dev/null 2>&1
+stop_spinner $?
+
+start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
+    mkdir /home/$user/.config/autostart
+      echo "[Desktop Entry]
+  Type=Application
+  Name=mediaplayer
+  Exec=/usr/bin/bash /home/$user/player/run_on_boot.sh" > /home/$user/.config/autostart/mediaplayer.desktop
 stop_spinner $?
 
 # echo "Instalacion finalizada."
