@@ -33,8 +33,8 @@ player.on('app-exit', async (code) => {
     console.log(`[ MEDIA PLAYER - EVENT CLOSED - ${currentDate()} - exit code: ${code}]`);
     if( current.monitor.count_closed_mediaplayer >= current.monitor.limits.closed_mediaplayer){
         console.log(`[ MEDIA PLAYER - Player closed: Problem with streaming, closed too many times - ${currentDate()}]`);
+        current.monitor.openplayer= false
         current.broadcast = false
-        current.monitor.limits.reached = true
         current.message = '[ MEDIA PLAYER - Player closed: Problem with streaming, closed too many times ]'
         await doPublishLaunchPlayer(current)
     }else{
@@ -44,10 +44,12 @@ player.on('app-exit', async (code) => {
 //   ----- end events of player media -----
 
 //Se definen los parametros del player, url, volumen etc
-function launch(name, url){
+function launch(name, url, volume){
+    const volumen = volume || 1
     player.launch( function(){
-        console.log(`[LAUNCH - parametros iniciales del streaming]`);
-        newStreaming(name,url)
+        console.log(`[ LAUNCH - parametros iniciales del streaming ]`);
+        current.monitor.openplayer = true
+        newStreaming(name,url,volumen)
     });
 }
 
@@ -65,9 +67,9 @@ function launchCurrentStream(){
 function restartPlayer( reason ){
     player.quit( e => {
         if(e) return console.error(`[ Player - Error closing media player ${e.message} - ${currentDate()}] `);
+        current.monitor.openplayer = false
         console.log(`[ Player - closing media player from ${reason} - ${currentDate()} ]`);
       })
-
     setTimeout(()=>{
         launchCurrentStream()
     },3000)
@@ -80,18 +82,15 @@ function changeVolume(volume, cb){
 
 // Change the streaming and update object streaming
 function newStreaming(name, url, volume){
-    console.log(volume);
-    const volumen = volume || 1
     player.load( url, ()=>{
         console.log(`[ MEDIA PLAYER - EVENT - LOAD - ${currentDate()} ]`);
         current.name = name
         current.url = url
-        player.setVolume(volumen,()=>{
-            console.log(` level volumen = ${volumen} `);
+        player.setVolume(volume,()=>{
+            console.log(` level volumen = ${volume} `);
         })
     })
 }
-
 
 module.exports = {
     launch,

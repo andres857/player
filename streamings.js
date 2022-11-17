@@ -32,9 +32,10 @@ streamings = {
       previous_time_pos:'',
       count_closed_mediaplayer : 0,
       streaming_stop: 0,
+      openplayer: false,
       limits:{
         streaming_stop: 3,
-        closed_mediaplayer: 5
+        closed_mediaplayer: 3
       }
     }
   } 

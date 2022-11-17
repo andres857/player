@@ -1,11 +1,12 @@
 const shutdown = require('../player/restart')
-const {newStreaming} =require('../player/mediaplayer')
+const {newStreaming,launch} =require('../player/mediaplayer')
 const {doPublishStatusPlayer,
     doPublishStreamingPlayer,
     doPublishInterfaces,
     doPublishInfoPlayer,
     doPublishNode} = require('./publication')
 const {currentDate} = require('../date')
+const {current} = require('../streamings')
 
 
 function evaluate(action){
@@ -57,11 +58,15 @@ async function receiverMessages(client,topics_subscriber){
     console.log(`[ Broker - received from topic ${topic} : the message ${message} ]`)
     if( topic === topics_subscriber.player ){
             console.log('hola mundo');
-            console.log(message.has);          
         }else if( topic === topics_subscriber.players ){
             if(message.hasOwnProperty('newstreaming')){
                 console.log('nuevo streaming recibido');
-                newStreaming(message.name,message.url,message.volume)
+                if (!current.monitor.openplayer){
+                    console.log('[ PLAYER - open player ]');
+                    launch(message.name,message.url,message.volume)
+                }else{
+                    newStreaming(message.name,message.url,message.volume)
+                }
             }else{
                 let k = Object.values(message) 
                 evaluate(k[0])
@@ -69,7 +74,6 @@ async function receiverMessages(client,topics_subscriber){
         } 
     })
 }
-
 
 module.exports={
     doSubscriber,
