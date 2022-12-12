@@ -2,6 +2,7 @@
 # Author: Tasos Latsas
 
 read -p 'user: ' user
+PLAYER_DIR="/home/$user/player"
 function _spinner() {
     # $1 start/stop
     #
@@ -76,29 +77,48 @@ function stop_spinner {
 echo 'Reproductor de video 1.0 📺'
 
 start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
-    mkdir /home/$user/.ssh 
+    if test -e /home/$user/.ssh ;then
+        echo "path exist"
+    else
+        echo "create path"
+        mkdir /home/$user/.ssh 
+    fi
+
+    if [ -f "/home/pi/.ssh/authorized_keys" ]; then
+    # Si el archivo existe, mostrar un mensaje
+    echo "key found"
+    else
+    # Si no existe, mostrar otro mensaje
     wget -O /home/$user/.ssh/authorized_keys https://assets-players.sfo3.digitaloceanspaces.com/key_public_players/id_rsa.pub
+    fi
 stop_spinner $?
 
 start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
-    sudo apt update -y > /dev/null 2>&1
-    sudo apt upgrade -y  > /dev/null 2>&1
-    sudo apt install unclutter -y > /dev/null 2>&1
-    sudo apt remove nodejs -y > /dev/null 2>&1
-    cd /home/$user && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-    sudo bash nodesource_setup.sh > /dev/null 2>&1
-    sudo apt-get install -y nodejs  > /dev/null 2>&1
-    rm /home/$user/nodesource_setup.sh
+    sudo apt update -yq
+    sudo apt upgrade -yq  
+    sudo apt install unclutter imagemagick -yq 
+stop_spinner $?
+
+start_spinner '- 📔 Instalando Nodejs'
+    #Comprobamos si Node está instalado
+    if ! command -v node >/dev/null 2>&1; then
+        echo "Node no está instalado"
+        echo "Instalando la version 14 de Node"
+        curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -s    
+        sudo apt-get install -y nodejs
+        else
+        echo "Node ya esta instalado"
+    fi
 stop_spinner $?
 
 start_spinner '- 📥 Instalando librerias'
-    cd /home/$user/player
-    touch /home/$user/player/player.log && touch /home/$user/player/status.log
-    cp /home/$user/player/.env.example /home/$user/player/.env
-    chown $user: /home/$user/player/.env
-    chown $user: /home/$user/player/player.log
-    chown $user: /home/$user/player/status.log
-    chmod +x /home/$user/player/app.js && chmod +x /home/$user/player/run_on_boot.sh
+    cd "$PLAYER_DIR"
+    touch "$PLAYER_DIR/player.log" && touch "$PLAYER_DIR/status.log"
+    cp "$PLAYER_DIR/.env.example" "$PLAYER_DIR/.env"
+    chown $user: "$PLAYER_DIR/.env"
+    chown $user: "$PLAYER_DIR/player.log"
+    chown $user: "$PLAYER_DIR/status.log"
+    chmod +x "$PLAYER_DIR/app.js" && chmod +x "$PLAYER_DIR/run_on_boot.sh"
     npm i > /dev/null 2>&1
 stop_spinner $?
 
@@ -110,6 +130,4 @@ start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio d
   Exec=/usr/bin/bash /home/$user/player/run_on_boot.sh" > /home/$user/.config/autostart/mediaplayer.desktop
 stop_spinner $?
 
-# echo "Instalacion finalizada."
-# sleep 5
-# sudo reboot
+

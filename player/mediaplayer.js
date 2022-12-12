@@ -6,7 +6,7 @@ const { doPublishLaunchPlayer } = require('../broker/publication');
 
 const player = new PlayerController({
     app: 'vlc',
-    args: ['--video-on-top','--fullscreen', '--no-video-title-show'],//
+    args: ['--fullscreen', '--no-video-title-show','--video-on-top'],//
     media: institutional.url
   });
 
