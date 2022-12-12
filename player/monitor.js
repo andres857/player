@@ -4,7 +4,7 @@ const {currentDate} =require('../date')
 
 function playerIsRunning(time_pos){
     if (time_pos > current.monitor.previous_time_pos){
-        console.log(`[ MONITOR - Player running streaming - ${currentDate()} ]`);
+        // console.log(`[ MONITOR - Player running streaming - ${currentDate()} ]`);
         current.monitor.previous_time_pos = time_pos
         current.monitor.streaming_stop = 0
         current.broadcast = true
