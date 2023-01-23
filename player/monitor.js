@@ -17,7 +17,7 @@ function playerIsRunning(time_pos){
                 if(e){
                     console.error(`[ MONITOR - Error closing media player ${e.message} - ${currentDate()}] `);
                 }else{
-                    console.log(`[ MONITOR - closing media player`);
+                    console.log(`[ MONITOR - Closing media player`);
                 }
             })
         }

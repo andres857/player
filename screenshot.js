@@ -1,17 +1,20 @@
 const { exec } = require('child_process');
+const fs = require('fs');
 
-
-function screenshot(){
-    exec('import -window root screenshot.png', (error, stdout, stderr) => {
+function screenshot() {
+    if(fs.existsSync('screenshot.png')) {
+      fs.unlinkSync('screenshot.png');
+  }
+    exec('scrot -u -f screenshot.png', (error, stdout, stderr) => {
         if (error) {
-          console.error(`exec error: ${error}`);
-          return;
+            console.error(`exec error: ${error}`);
+            return;
         }
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-      });
+        console.log(`Screenshot taken and saved to screenshot.png`);
+    });
 }
-screenshot()
+
 module.exports = {
     screenshot
 }
+

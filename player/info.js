@@ -1,7 +1,5 @@
 const si = require('systeminformation')
 const os = require('os')
-const { exec } = require('child_process');
-
 
 async function status() {
     try {
@@ -52,26 +50,11 @@ async function getSerial(){
   return serial.substring(serial.length -8)
 }
 
-function signalWifi(){
-  exec('iwconfig', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`error: ${error.message}`);
-      return;
-    }else{
-      const signalLevel = stdout.slice(317, 329)
-      console.log(rta);
-      let rta = signalLevel.split('=')
-      return rta
-    }
-  });
-}
-
 module.exports = {
     status,
     interfaces,
     info,
     nodeversion,
-    getSerial,
-    signalWifi
+    getSerial
 }
 
