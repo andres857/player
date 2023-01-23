@@ -3,7 +3,6 @@ const { institutional, current} = require('../streamings')
 const {currentDate} = require('../date')
 const { doPublishLaunchPlayer } = require('../broker/publication');
 
-
 const player = new PlayerController({
     app: 'vlc',
     args: ['--fullscreen', '--no-video-title-show','--video-on-top'],//
