@@ -17,6 +17,7 @@ const customer = {
 }
 const player = {
     hostname: process.env.HOSTNAME,
+    ssid: process.env.SSID_WIFI,
     serial: ''
 }
 

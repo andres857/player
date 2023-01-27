@@ -16,8 +16,7 @@
     "media-player-controller": "^1.5.3",
     "moment": "^2.29.4",
     "mqtt": "^4.2.8",
-    "node-wifi": "^2.0.16",
-    "nodemon": "^2.0.19",
+    "rpi-wifi-connection": "^1.0.17",
     "socket.io-client": "^4.5.4",
     "systeminformation": "^5.12.6",
     "xrandr": "^1.3.0"

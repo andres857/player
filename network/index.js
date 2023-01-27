@@ -1,66 +1,34 @@
 const io = require('socket.io-client');
 const player = require('../player/info')
-// Conectarse al servidor de Socket.io
-const socket = io('http://104.131.10.75:3003');
+const socket = io('http://104.131.10.75:3004');
 const Device = require('../player/info')
-// Escuchar eventos personalizados del servidor
 
 const mediaPlayer = new Device()
 
-function getStatusDevice(){
-  mediaPlayer.status().then((status)=>{
-    socket.emit('status', status)
-  }).catch(e => console.log(e))
+function handleAction(action) {
+  switch (action) {
+    case 'interfaces':
+      return mediaPlayer.interfaces();
+    case 'status':
+      return mediaPlayer.status();
+    case 'info':
+      return mediaPlayer.info();
+    case 'nodeversion':
+      return mediaPlayer.nodeversion();
+    case 'serial':
+      return mediaPlayer.getSerial();
+    default:
+      console.log('No se cumple ningun caso');
+  }
 }
 
-function getInteraces(){
-  mediaPlayer.interfaces().then((interfaces)=>{
-    socket.emit('interfaces', interfaces)
-  }).catch(e => console.log(e))
-}
-
-function getSerial(){
-  mediaPlayer.getSerial().then((serial)=>{
-    socket.emit('serial', serial)
-    console.log(serial);
-  }).catch(e => {
-    console.log(e);
-  })  
-}
-
-function getInfoDevice(){
-  mediaPlayer.info().then((data)=>{
-    socket.emit('info', data)
-  }).catch(e => console.log(e))
-}
-
-function getNodeVersion() {
-  mediaPlayer.nodeversion().then((data)=>{
-    socket.emit('nodeversion', data)
-  }).catch(e => console.log(e));
-}
-
-mediaPlayer.getSerial().then((serial)=>{
-  socket.on(serial, (action)=>{
-    switch (action) {
-      case 'interfaces':
-        getInteraces()
-        break;
-      case 'status':
-        getStatusDevice()
-         break;
-      case 'info':
-        getInfoDevice()
-          break;
-      case 'nodeversion':
-        getNodeVersion()
-          break;
-      case 'serial':
-        getSerial()
-          break;
-      default:
-        console.log('No se cumple ningun caso');
-        break;
-    }
-  })
-})
+mediaPlayer.getSerial()
+  .then((serial) => {
+    socket.on(serial, (action) => {
+      handleAction(action)// return a function 
+        .then((data) => {
+          socket.emit('data', { action, data });
+        })
+        .catch((e) => console.log(e))
+    })
+  }).catch((e) => console.log(e))
