@@ -1,10 +1,10 @@
 require('dotenv').config({ path: '~/player/.env'})
 
 const connection_broker = {
-    server : process.env.SERVERBROKER,
-    portBroker : process.env.PORTBROKER,
-    usernameBroker : process.env.USERNAME,
-    passwordBroker : process.env.PASSWORD,
+    server : process.env.SERVER_BROKER,
+    portBroker : process.env.PORT_BROKER,
+    usernameBroker : process.env.USERNAME_BROKER,
+    passwordBroker : process.env.PASSWORD_BROKER,
 }
 
 const channels = {
@@ -15,15 +15,15 @@ const channels = {
 const customer = {
     name: process.env.CLIENT
 }
-const player = {
-    hostname: process.env.HOSTNAME,
-    ssid: process.env.SSID_WIFI,
-    serial: ''
+
+const systemInfo = {
+    username: process.env.USERNAME || null,
+    ssid: process.env.SSID_WIFI || null,
 }
 
 module.exports ={
     connection_broker,
     channels,
     customer,
-    player
+    systemInfo
 }

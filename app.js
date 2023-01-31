@@ -4,18 +4,19 @@ const { launch } = require('./player/mediaplayer')
 const { buildTopics } = require('./broker/topics')
 const { connectBroker } = require('./broker/')
 const { doSubscriber, receiverMessages } = require('./broker/subscriber')
-const { getSerial } = require('./player/info')
+const Device = require('./player/info')
 
 require('./player/monitor').monitoringStreaming()
 require('./stats').loopStatus()
 
+const player = new Device()
 
 async function main(){
     try {
-        const serial = await getSerial()
+        const serial = await player.getSerial()
         const {suscriber} = await buildTopics(serial)
         const client = await connectBroker(serial)
-
+         
         doSubscriber(client,suscriber).then((client)=>{
             receiverMessages(client, suscriber).then(()=>{
                 console.log('[ PLAYER - ready for receiver messages from broker ]');
@@ -24,7 +25,6 @@ async function main(){
             console.log(e);
         })
         await launch( streamings.institutional.name, streamings.institutional.url)
-
     } catch (error) {
         console.log(error);
     }

@@ -1,5 +1,4 @@
 const io = require('socket.io-client');
-const player = require('../player/info')
 const socket = io('http://104.131.10.75:3004');
 const Device = require('../player/info')
 

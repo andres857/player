@@ -1,15 +1,15 @@
 const os = require("os");
 const fs = require('fs/promises');
-const { status } = require('./player/info')
+const Device = require('./player/info')
 const { currentDateForStats } = require('./date')
 const streamings = require('./streamings')
 const { playerIsRunning } = require('./player/monitor')
-const {player} = require('./config')
 const running = true
 
+const player = new Device()
 async function writeStatusPlayer() {
   try {
-    const content = await status();
+    const content = await player.status();
     const { current } = streamings
     const channel = {
       status: current.broadcast,
@@ -19,7 +19,8 @@ async function writeStatusPlayer() {
     const arrContent = Object.values(content)
     const arrStreaming = Object.values(channel)
     playerIsRunning(streamings.current.monitor.time_pos)
-    await fs.writeFile(`/home/${player.hostname}/player/status.log`, arrContent + ',' + currentDateForStats() + "," + arrStreaming + os.EOL , { flag: 'a+' } );
+    let { username } = player.system()
+    await fs.writeFile(`/home/${username}/player/status.log`, arrContent + ',' + currentDateForStats() + "," + arrStreaming + os.EOL , { flag: 'a+' } );
   } catch (err) {
     console.log(err);
   }

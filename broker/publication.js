@@ -1,13 +1,15 @@
 const { connectBroker } = require('./index')
 const { buildTopics } = require('../broker/topics')
-const { status,interfaces,info,nodeversion } = require('../player/info')
 const {currentDate} = require('../date')
 const { current } = require('../streamings')
-const {getSerial} = require('../player/info')
+const Device = require('../player/info')
+
+
+const player = new Device()
 
 async function getParams(){
     const client = await connectBroker()
-    const serial = await getSerial()
+    const serial = await player.getSerial()
     let { publish } =  await buildTopics(serial)
     return {client, publish}
 }
@@ -28,7 +30,7 @@ async function doPublishLaunchPlayer(currentStreaming){
 
 async function doPublishStatusPlayer(){
     const {client, publish} = await getParams()
-    const statusPlayer = await status()
+    const statusPlayer = await player.status()
 
     await client.publish( publish.status, JSON.stringify(statusPlayer), { 
         qos:2, 
@@ -48,7 +50,7 @@ async function doPublishStreamingPlayer(){
 
 async function doPublishInterfaces(){
     const {client, publish} = await getParams()
-    const interfacesPlayer = await interfaces()
+    const interfacesPlayer = await player.interfaces()
     await client.publish( publish.status, JSON.stringify(interfacesPlayer), { 
         qos:2, 
         retain:true 
@@ -58,7 +60,7 @@ async function doPublishInterfaces(){
 
 async function doPublishInfoPlayer(){
     const {client, publish} = await getParams()
-    const infoPlayer = await info()
+    const infoPlayer = await player.info()
     await client.publish( publish.status, JSON.stringify(infoPlayer), { 
         qos:2, 
         retain:true 
@@ -68,7 +70,7 @@ async function doPublishInfoPlayer(){
 
 async function doPublishNode(){
     const {client, publish} = await getParams()
-    const nodePlayer = await nodeversion()
+    const nodePlayer = await player.nodeversion()
     await client.publish( publish.status, JSON.stringify(nodePlayer), { 
         qos:2, 
         retain:true 
