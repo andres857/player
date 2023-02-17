@@ -1,8 +1,8 @@
+const { exec } = require('child_process');
 const si = require('systeminformation')
 const os = require('os')
 const {systemInfo} = require('../config')
 const Wifi = require('rpi-wifi-connection');
-
 
 class Device {
   constructor(){
@@ -69,10 +69,17 @@ class Device {
     return myNetwork.signalLevel 
   }
 
-  shutdown(callback){
+  reboot(){
     exec('sudo /sbin/shutdown -r now', function(error, stdout, stderr){
-        console.log(`Reiniciando el dispositivo`);
-        callback(stdout);
+      if (error) {
+        console.error(`exec error: ${error}`);
+        return error;
+      }  
+      if (stderr) {
+        console.error(`stderr: ${stderr}`);
+        return stderr;
+      }
+      console.log(`stdout: ${stdout}`);
     });
   }
 }

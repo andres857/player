@@ -1,44 +1,10 @@
-const shutdown = require('../player/restart')
 const {newStreaming,launch} =require('../player/mediaplayer')
-const {doPublishStatusPlayer,
-    doPublishStreamingPlayer,
-    doPublishInterfaces,
-    doPublishInfoPlayer,
-    doPublishNode} = require('./publication')
 const {currentDate} = require('../date')
 const {current} = require('../streamings')
+const handleService = require('../services/index')
+const { doPublish } = require('../broker/publication')
 
-
-function evaluate(action){
-    options = {
-        restart: function(){
-            shutdown(function(output){
-                console.log(` Reiniciando player topic global - ${currentDate()} `);
-                console.log(output);
-            });
-        },
-        status: async function(){
-            await doPublishStatusPlayer()
-        },
-        streaming: async function(){
-            await doPublishStreamingPlayer()
-        },
-        interfaces: async function(){
-            await doPublishInterfaces()
-        },
-        info: async function(){
-            await doPublishInfoPlayer()
-        },
-        node: async function(){
-            await doPublishNode()
-        },
-        nothing: function(){
-            console.log('Nada para hacer');
-        }
-    }
-    const execute = options[action] ??  options['nothing'];
-    execute()
-}
+const service = new handleService()
 
 async function doSubscriber(client,topics){
     try {
@@ -55,22 +21,23 @@ async function doSubscriber(client,topics){
 async function receiverMessages(client,topics_subscriber){
     client.on('message', async function ( topic, payload ) {
     let message = JSON.parse( payload )
-    console.log(`[ Broker - received from topic ${topic} : the message ${message} ]`)
+    console.log(`[ Broker - received from topic ${topic} : the message]`, message)
     if( topic === topics_subscriber.player ){
-            console.log('hola mundo');
-        }else if( topic === topics_subscriber.players ){
-            if(message.hasOwnProperty('newstreaming')){
-                console.log('nuevo streaming recibido');
-                if (!current.monitor.openplayer){
-                    console.log('[ PLAYER - open player ]');
-                    launch(message.name,message.url,message.volume)
-                }else{
-                    newStreaming(message.name,message.url,message.volume)
-                }
+        let data = await service.handle(message.mediaplayer.request)
+        let payload = JSON.stringify(data);
+        await doPublish(payload)
+    }else if( topic === topics_subscriber.players ){
+        if(message.hasOwnProperty('newstreaming')){
+            console.log('nuevo streaming recibido');
+            if (!current.monitor.openplayer){
+                console.log('[ PLAYER - open player ]');
+                launch(message.name,message.url,message.volume)
             }else{
-                let k = Object.values(message) 
-                evaluate(k[0])
+                newStreaming(message.name,message.url,message.volume)
             }
+        }else{
+            
+        }
         } 
     })
 }

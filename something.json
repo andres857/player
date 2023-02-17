@@ -1,0 +1,79 @@
+{
+  "mediaplayer": {
+    "request": {
+      "status": "",
+      "interfaces": "",
+      "info": "",
+      "nodeversion": "",
+      "getserial": ""
+    },
+    "actions": {
+      "newstreaming": {
+        "name": "",
+        "url": "",
+        "volumen": "",
+        "duration": ""
+      },
+      "restart": {
+        "device": "",
+        "mediaplayer": ""
+      }
+    }
+  }
+}
+
+// request
+
+{
+  "mediaplayer": {
+    "request": {
+      "status": true,
+      "interfaces": "",
+      "info": "",
+      "nodeversion": "",
+      "getserial": "",
+      "restart":""
+    }
+  }
+}
+
+// template for request 
+{
+  "mediaplayer": {
+    "request": "status"
+  }
+}
+
+
+{
+  "mediaplayer": {
+    "request": {
+      "newstreaming": {
+        "name": "caracol",
+        "url": "http",
+        "volumen": 1,
+        "duration": 60
+      }
+    }
+  }
+}
+// template fot actions
+
+{
+  "mediaplayer": {
+    "request": {
+      "newstreaming": {
+        "name": "",
+        "url": "",
+        "volumen": "",
+        "duration": ""
+      },
+      "restart": {
+        "device": "",
+        "mediaplayer": ""
+      }
+    }
+  }
+}
+
+

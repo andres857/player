@@ -1,6 +1,8 @@
 #!/bin/bash
 export DISPLAY=:0 
 sleep 1
+wg-quick up wg0
+sleep 10
 pcmanfm --set-wallpaper ~/player/wallpapper.jpg
 unclutter -idle 0 &
 SCRIPT=~/player/app.js 

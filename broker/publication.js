@@ -14,9 +14,9 @@ async function getParams(){
     return {client, publish}
 }
 
-async function doPublishResponse( message ){
-    const {client, publish} = await getParams()
-    await client.publish(publish.response, message)
+async function doPublish(msg){
+    const { client, publish } = await getParams()
+    await client.publish(publish.response, msg)
 }
 
 async function doPublishLaunchPlayer(currentStreaming){
@@ -80,7 +80,7 @@ async function doPublishNode(){
 
 
 module.exports = {
-    doPublishResponse,
+    doPublish,
     doPublishLaunchPlayer,
     doPublishStatusPlayer,
     doPublishStreamingPlayer,
