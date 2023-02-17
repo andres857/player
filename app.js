@@ -14,7 +14,7 @@ const player = new Device()
 async function main(){
     try {
         const serial = await player.getSerial()
-        // await launch( streamings.institutional.name, streamings.institutional.url)
+        await launch( streamings.institutional.name, streamings.institutional.url)
         
         const {suscriber} = await buildTopics(serial)
         const client = await connectBroker(serial)

@@ -1,7 +1,7 @@
 const PlayerController = require('media-player-controller');
 const { institutional, current} = require('../streamings')
 const {currentDate} = require('../date')
-const { doPublishLaunchPlayer } = require('../broker/publication');
+const { doPublish } = require('../broker/publication');
 
 const player = new PlayerController({
     app: 'vlc',
@@ -24,7 +24,8 @@ player.on('playback-started',  async () => {
     current.broadcast = true
     current.monitor.previous_time_pos = current.monitor.time_pos
     console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ current.name } - ${ current.url } - ${currentDate()} ]`)
-    await doPublishLaunchPlayer(current)
+    let payload = JSON.stringify(current)
+    await doPublish(payload)    
 });
 
 player.on('app-exit', async (code) => {
@@ -35,7 +36,8 @@ player.on('app-exit', async (code) => {
         current.monitor.openplayer= false
         current.broadcast = false
         current.message = '[ MEDIA PLAYER - Player closed: Problem with streaming, closed too many times ]'
-        await doPublishLaunchPlayer(current)
+        let payload = JSON.stringify(current)
+        await doPublish(payload)
     }else{
         launchCurrentStream()
     }

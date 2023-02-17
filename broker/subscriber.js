@@ -23,21 +23,13 @@ async function receiverMessages(client,topics_subscriber){
     let message = JSON.parse( payload )
     console.log(`[ Broker - received from topic ${topic} : the message]`, message)
     if( topic === topics_subscriber.player ){
-        let data = await service.handle(message.mediaplayer.request)
+        let data = await service.handle(message.mediaplayer)
         let payload = JSON.stringify(data);
         await doPublish(payload)
     }else if( topic === topics_subscriber.players ){
-        if(message.hasOwnProperty('newstreaming')){
-            console.log('nuevo streaming recibido');
-            if (!current.monitor.openplayer){
-                console.log('[ PLAYER - open player ]');
-                launch(message.name,message.url,message.volume)
-            }else{
-                newStreaming(message.name,message.url,message.volume)
-            }
-        }else{
-            
-        }
+        let data = await service.handle(message.mediaplayer)
+        let payload = JSON.stringify(data);
+        await doPublish(payload)
         } 
     })
 }
