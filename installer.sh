@@ -123,14 +123,6 @@ start_spinner '- 📥 Instalando librerias'
     npm i > /dev/null 2>&1
 stop_spinner $?
 
-start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
-    mkdir /home/$user/.config/autostart
-      echo "[Desktop Entry]
-  Type=Application
-  Name=mediaplayer
-  Exec=/usr/bin/bash /home/$user/player/run_on_boot.sh" > /home/$user/.config/autostart/mediaplayer.desktop
-stop_spinner $?
-
 start_spinner '- 📥 creacion de archivos para limpiar el sistema de logs periodicamente'
     echo "#!/bin/bash 
 cat /dev/null > /home/$user/player/player.log 
@@ -144,4 +136,11 @@ start_spinner '- 📥 Se anaden tareas para limpiar el contenido de logs'
     echo "0 0 1 * * $user /home/$user/player/clearlogs.sh" > /etc/crontab
 stop_spinner $?
 
+start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio del reproductor multimedia'
+    mkdir /home/$user/.config/autostart
+      echo "[Desktop Entry]
+  Type=Application
+  Name=mediaplayer
+  Exec=/usr/bin/bash /home/$user/player/run_on_boot.sh" > /home/$user/.config/autostart/mediaplayer.desktop
+stop_spinner $?
 
