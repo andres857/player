@@ -98,6 +98,7 @@ start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
     sudo apt upgrade -yq  
     sudo apt install unclutter imagemagick -yq 
     sudo apt install raspberrypi-kernel-headers -yq
+    sudo apt autoremove -yqs
 stop_spinner $?
 
 start_spinner '- 📔 Instalando Nodejs'
