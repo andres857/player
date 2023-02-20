@@ -21,9 +21,12 @@ const systemInfo = {
     ssid: process.env.SSID_WIFI || null,
 }
 
+const debug = process.env.DEBUG
+
 module.exports ={
     connection_broker,
     channels,
     customer,
-    systemInfo
+    systemInfo,
+    debug
 }

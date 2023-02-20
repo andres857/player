@@ -131,4 +131,17 @@ start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio d
   Exec=/usr/bin/bash /home/$user/player/run_on_boot.sh" > /home/$user/.config/autostart/mediaplayer.desktop
 stop_spinner $?
 
+start_spinner '- 📥 creacion de archivos para limpiar el sistema de logs periodicamente'
+    echo "#!/bin/bash 
+cat /dev/null > /home/$user/player/player.log 
+sleep 5
+cat /dev/null > /home/$user/player/status.log " > /home/$user/player/clearlogs.sh
+    chown $user: "$PLAYER_DIR/clearlogs.sh"
+    chmod +x $PLAYER_DIR/clearlogs.sh
+stop_spinner $?
+
+start_spinner '- 📥 Se anaden tareas para limpiar el contenido de logs'
+    echo "0 0 1 * * $user /home/$user/player/clearlogs.sh" > /etc/crontab
+stop_spinner $?
+
 

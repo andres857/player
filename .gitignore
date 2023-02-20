@@ -4,3 +4,6 @@ player.log
 status.log
 package-lock.json
 screenshot.png
+clearlogs.sh
+test.js
+test.mjs

@@ -56,6 +56,19 @@
     }
   }
 }
+
+{
+  "mediaplayer": {
+    "request": {
+      "newstreaming": {
+        "name": "wchannel",
+        "url": "http://192.168.1.202/comercial-local.m3u8",
+        "volumen": 1,
+        "duration": 60
+      }
+    }
+  }
+}
 // template fot actions
 
 {

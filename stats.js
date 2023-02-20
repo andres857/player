@@ -10,17 +10,25 @@ const player = new Device()
 async function writeStatusPlayer() {
   try {
     const content = await player.status();
+    const connectionType = await player.connectionTypeUse();
+    let strenghtWifi = 'n/a'
+    if (connectionType === "wlan0") {
+      strenghtWifi = await player.strenghtWifiSignal();
+    }
+
     const { current } = streamings
     const channel = {
       status: current.broadcast,
       name: current.name,
-      url: current.url
+      openplayer: current.monitor.openplayer
+      // url: current.url
     }
     const arrContent = Object.values(content)
     const arrStreaming = Object.values(channel)
     playerIsRunning(streamings.current.monitor.time_pos)
     let { username } = player.system()
-    await fs.writeFile(`/home/${username}/player/status.log`, arrContent + ',' + currentDateForStats() + "," + arrStreaming + os.EOL , { flag: 'a+' } );
+    let datestats = currentDateForStats() 
+    await fs.writeFile(`/home/${username}/player/status.log`, datestats + "," + arrContent + "," + connectionType + "," + strenghtWifi + "," + arrStreaming + os.EOL , { flag: 'a+' } );
   } catch (err) {
     console.log(err);
   }

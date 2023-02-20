@@ -31,6 +31,27 @@ class Device {
     return await os.networkInterfaces()
   }
 
+  async connectionTypeUse(){
+    try {
+      const networkInterfaces = os.networkInterfaces();
+      let connectionType;
+
+      Object.keys(networkInterfaces).forEach((interfaceName) => {
+        if (interfaceName === 'eth0' || interfaceName === 'wlan0') {
+          networkInterfaces[interfaceName].forEach((interfaceData) => {
+            if (interfaceData.family === 'IPv4' && !interfaceData.internal && interfaceData.address) {
+              connectionType = interfaceName;
+            }
+          });
+        }
+      });
+      return connectionType;
+    } catch (error) {
+      console.log('PLAYER - ERROR OBTENIENDO INFORMACION DE LA RED', error);
+      return 'Network interface not found'
+    }
+  }
+
   async info(){
     try {
       return await si.osInfo()
@@ -83,5 +104,6 @@ class Device {
     });
   }
 }
+
 
 module.exports = Device

@@ -12,8 +12,7 @@ const player = new PlayerController({
 //   ----- events of player media -----
 // Data object with current playback event 
 player.on('playback', (data)=>{
-    current.monitor.time_pos = data.value
-    // console.log(current.monitor);
+    current.monitor.time_pos = data.value    
 });
 
 // Playback started and player can now be controlled
@@ -22,6 +21,7 @@ player.on('playback-started',  async () => {
     current.monitor.count_closed_mediaplayer = 0
     current.monitor.streaming_stop = 0
     current.broadcast = true
+    current.monitor.openplayer= false
     current.monitor.previous_time_pos = current.monitor.time_pos
     console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ current.name } - ${ current.url } - ${currentDate()} ]`)
     let payload = JSON.stringify(current)
@@ -49,7 +49,6 @@ function launch(name, url, volume){
     const volumen = volume || 1
     player.launch( function(){
         console.log(`[ LAUNCH - parametros iniciales del streaming ]`);
-        current.monitor.openplayer = true
         newStreaming(name,url,volumen)
     });
 }
@@ -68,7 +67,6 @@ function launchCurrentStream(){
 function restartPlayer( reason ){
     player.quit( e => {
         if(e) return console.error(`[ Player - Error closing media player ${e.message} - ${currentDate()}] `);
-        current.monitor.openplayer = false
         console.log(`[ Player - closing media player from ${reason} - ${currentDate()} ]`);
       })
     setTimeout(()=>{
@@ -85,6 +83,7 @@ function changeVolume(volume, cb){
 function newStreaming(name, url, volume){
     player.load( url, ()=>{
         console.log(`[ MEDIA PLAYER - EVENT - LOAD - ${currentDate()} ]`);
+        current.monitor.openplayer= false
         current.name = name
         current.url = url
         player.setVolume(volume,()=>{
