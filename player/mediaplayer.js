@@ -2,7 +2,8 @@ const PlayerController = require('media-player-controller');
 const { institutional, current} = require('../streamings')
 const {currentDate} = require('../date')
 const { doPublish } = require('../broker/publication');
-
+const mediaPlayer = require('../player/info') 
+const device = new mediaPlayer()
 const player = new PlayerController({
     app: 'vlc',
     args: ['--fullscreen', '--no-video-title-show','--video-on-top'],//
@@ -19,9 +20,8 @@ player.on('playback', (data)=>{
 player.on('playback-started',  async () => {
     console.log(`[ MEDIA PLAYER - EVENT - PLAYBACK - EL STREAMING A COMENZADO ]`);
     current.monitor.count_closed_mediaplayer = 0
-    current.monitor.streaming_stop = 0
     current.broadcast = true
-    current.monitor.openplayer= false
+    current.monitor.openplayer= true
     current.monitor.previous_time_pos = current.monitor.time_pos
     console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ current.name } - ${ current.url } - ${currentDate()} ]`)
     let payload = JSON.stringify(current)
@@ -30,14 +30,16 @@ player.on('playback-started',  async () => {
 
 player.on('app-exit', async (code) => {
     current.monitor.count_closed_mediaplayer = current.monitor.count_closed_mediaplayer + 1
+    current.monitor.streaming_stop = 0
     console.log(`[ MEDIA PLAYER - EVENT CLOSED - ${currentDate()} - exit code: ${code}]`);
     if( current.monitor.count_closed_mediaplayer >= current.monitor.limits.closed_mediaplayer){
-        console.log(`[ MEDIA PLAYER - Player closed: Problem with streaming, closed too many times - ${currentDate()}]`);
+        console.log(`[ MEDIA PLAYER - Player closed: Problem with streaming, closed too many times, restart device - ${currentDate()}]`);
         current.monitor.openplayer= false
         current.broadcast = false
-        current.message = '[ MEDIA PLAYER - Player closed: Problem with streaming, closed too many times ]'
+        current.message = '[ MEDIA PLAYER - Player closed: Problem with streaming, closed too many times, restart device ]'
         let payload = JSON.stringify(current)
         await doPublish(payload)
+        device.reboot()
     }else{
         launchCurrentStream()
     }
@@ -47,7 +49,9 @@ player.on('app-exit', async (code) => {
 //Se definen los parametros del player, url, volumen etc
 function launch(name, url, volume){
     const volumen = volume || 1
+
     player.launch( function(){
+        current.monitor.openplayer= true
         console.log(`[ LAUNCH - parametros iniciales del streaming ]`);
         newStreaming(name,url,volumen)
     });
@@ -83,7 +87,6 @@ function changeVolume(volume, cb){
 function newStreaming(name, url, volume){
     player.load( url, ()=>{
         console.log(`[ MEDIA PLAYER - EVENT - LOAD - ${currentDate()} ]`);
-        current.monitor.openplayer= false
         current.name = name
         current.url = url
         player.setVolume(volume,()=>{

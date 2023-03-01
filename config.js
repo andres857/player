@@ -21,7 +21,7 @@ const systemInfo = {
     ssid: process.env.SSID_WIFI || null,
 }
 
-const debug = process.env.DEBUG
+const debug = process.env.DEBUG || 'false'
 
 module.exports ={
     connection_broker,
