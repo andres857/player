@@ -29,7 +29,9 @@ class handleServices{
       case 'serial':
         return this.mediaPlayer.getSerial();
       case 'restart':
-        return this.mediaPlayer.reboot()
+        return this.mediaPlayer.reboot();
+      case 'screenshot':
+        return this.mediaPlayer.screenshot();
       default:
         return 'Nada para hacer'
     }

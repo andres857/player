@@ -3,6 +3,7 @@ const si = require('systeminformation')
 const os = require('os')
 const {systemInfo} = require('../config')
 const Wifi = require('rpi-wifi-connection');
+const fs = require('fs');
 
 class Device {
   constructor(){
@@ -75,11 +76,11 @@ class Device {
   }
 
   async statusWifi(){
-      let statewifi = await this.isConnectWifi()
-      if (!statewifi) return false
+    let statewifi = await this.isConnectWifi()
+    if (!statewifi) return false
 
-      const network = await this.wifiNetworks.getStatus() 
-      return network
+    const network = await this.wifiNetworks.getStatus() 
+    return network
   }
 
   async strenghtWifiSignal(nameNetwork=systemInfo.ssid){
@@ -101,6 +102,19 @@ class Device {
         return stderr;
       }
       console.log(`stdout: ${stdout}`);
+    });
+  }
+
+  screenshot() {
+    if(fs.existsSync('screenshot.png')) {
+      fs.unlinkSync('screenshot.png');
+    }
+    exec('scrot -u -f screenshot.png', (error, stdout, stderr) => {
+        if (error) {
+            console.error(`exec error: ${error}`);
+            return;
+        }
+        console.log(`Screenshot taken and saved to screenshot.png`);
     });
   }
 }

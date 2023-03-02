@@ -3,11 +3,14 @@ const { institutional, current} = require('../streamings')
 const {currentDate} = require('../date')
 const { doPublish } = require('../broker/publication');
 const mediaPlayer = require('../player/info') 
+
+
 const device = new mediaPlayer()
 const player = new PlayerController({
     app: 'vlc',
     args: ['--fullscreen', '--no-video-title-show','--video-on-top'],//
-    media: institutional.url
+    media: institutional.url,
+    volume: 1
   });
 
 //   ----- events of player media -----
@@ -46,14 +49,13 @@ player.on('app-exit', async (code) => {
 });
 //   ----- end events of player media -----
 
-//Se definen los parametros del player, url, volumen etc
-function launch(name, url, volume){
-    const volumen = volume || 1
-
+//Se abre el reproductor multimedia por primera vez con los parametros iniciales
+function launch(name, url){
     player.launch( function(){
         current.monitor.openplayer= true
+        current.name = name
+        current.url = url
         console.log(`[ LAUNCH - parametros iniciales del streaming ]`);
-        newStreaming(name,url,volumen)
     });
 }
 
