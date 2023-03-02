@@ -1,4 +1,4 @@
-const {newStreaming,launch} =require('../player/mediaplayer')
+const {newStreaming} =require('../player/mediaplayer')
 const {currentDate} = require('../date')
 const {current} = require('../streamings')
 const handleService = require('../services/index')

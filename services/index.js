@@ -1,4 +1,4 @@
-const {newStreaming,launch} =require('../player/mediaplayer')
+const {newStreaming, launchMediaPlayer} =require('../player/mediaplayer')
 const {current} = require('../streamings')
 const Device = require('../player/info');
 
@@ -9,7 +9,7 @@ class handleServices{
 
   newStreamingReceived(name, url, volumen, duration){
     if (!current.monitor.openplayer){
-        launch(name,url,volumen,duration)
+        launchMediaPlayer(name,url,volumen,duration)
     }else{
         newStreaming(name,url,volumen,duration)
     }

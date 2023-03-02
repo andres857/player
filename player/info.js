@@ -105,19 +105,22 @@ class Device {
     });
   }
 
-  screenshot() {
+  async screenshot() {
     if(fs.existsSync('screenshot.png')) {
       fs.unlinkSync('screenshot.png');
     }
-    exec('scrot -u -f screenshot.png', (error, stdout, stderr) => {
+
+    return new Promise((resolve, reject)=>{
+      exec('scrot -u -f screenshot.png', (error, stdout, stderr) => {
         if (error) {
             console.error(`exec error: ${error}`);
-            return;
+            reject (error);
         }
-        console.log(`Screenshot taken and saved to screenshot.png`);
-    });
+        console.log(`Screenshot taken and saved`);
+        resolve('success')
+      });
+    })
   }
 }
-
 
 module.exports = Device

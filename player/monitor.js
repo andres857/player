@@ -42,7 +42,7 @@ function playerIsRunning(time_pos){
 function monitoringStreaming(){
     setInterval(() => {
         playerIsRunning(current.monitor.time_pos)
-    }, 120000);
+    }, 60000);
 }
 
 module.exports = {

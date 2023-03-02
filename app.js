@@ -1,6 +1,6 @@
 #!/usr/bin/node
-const streamings = require('./streamings')
-const { launch } = require('./player/mediaplayer')
+const { current } = require('./streamings')
+const { launchMediaPlayer } = require('./player/mediaplayer')
 const { buildTopics } = require('./broker/topics')
 const { connectBroker } = require('./broker/')
 const { doSubscriber, receiverMessages } = require('./broker/subscriber')
@@ -14,8 +14,7 @@ const player = new Device()
 async function main(){
     try {
         const serial = await player.getSerial()
-        await launch( streamings.institutional.name, streamings.institutional.url)
-        
+        await launchMediaPlayer()
         const {suscriber} = await buildTopics(serial)
         const client = await connectBroker(serial)
          
