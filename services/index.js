@@ -32,22 +32,24 @@ class handleServices{
         return this.mediaPlayer.reboot();
       case 'screenshot':
         return this.mediaPlayer.screenshot();
+      case 'closeStreaming':
+        return this.mediaPlayer.closeStreaming();
+      case 'openStreaming':
+        return this.mediaPlayer.openStreaming();
       default:
         return 'Nada para hacer'
     }
   }
 
   async handle(action) {
-    if (!action.request.newstreaming){
+    if ( !action.request.newstreaming ){
       let payload = action.request
-      return await this.handleRequest(payload)
+      return await this.handleRequest( payload )
     }else{
-      let {name, url, volumen, duration} = action.request.newstreaming
-      return this.newStreamingReceived(name, url, volumen, duration)    
+      let { name, url, volumen, duration } = action.request.newstreaming
+      return this.newStreamingReceived( name, url, volumen, duration )    
     }
   }
 }
 
 module.exports = handleServices
-
-

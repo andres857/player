@@ -10,6 +10,7 @@ const connection_broker = {
 const channels = {
     institucional: process.env.URL_STREAMING_INSTITUCIONAL,
     comercial: process.env.URL_STREAMING_COMERCIAL,
+    closeStreaming_request: false,
 }
 
 const customer = {

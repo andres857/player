@@ -2,6 +2,8 @@ const { current }  = require('../streamings')
 const {player} = require('./mediaplayer')
 const {currentDate} =require('../date')
 const {debug} = require('../config')
+const { channels } = require('../config')
+
 
 function playerIsRunning(time_pos){
     if (time_pos > current.monitor.previous_time_pos){
@@ -41,8 +43,12 @@ function playerIsRunning(time_pos){
 // every two minutes check if stream still active 120000
 function monitoringStreaming(){
     setInterval(() => {
-        playerIsRunning(current.monitor.time_pos)
-    }, 60000);
+        if (!channels.closeStreaming_request){
+            playerIsRunning(current.monitor.time_pos)
+        }else{
+            console.log(`[ MONITOR - Closing media player from request web ]`);
+        }
+    }, 10000);
 }
 
 module.exports = {

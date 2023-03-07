@@ -1,9 +1,10 @@
 const { exec } = require('child_process');
 const si = require('systeminformation')
 const os = require('os')
-const {systemInfo} = require('../config')
+const { systemInfo, channels } = require('../config')
 const Wifi = require('rpi-wifi-connection');
 const fs = require('fs');
+const {current} = require('../streamings')
 
 class Device {
   constructor(){
@@ -120,6 +121,27 @@ class Device {
         resolve('success')
       });
     })
+  }
+
+  async closeStreaming(){
+    return new Promise((resolve,reject)=>{
+      exec('killall vlc', (error, stdout, stderr) => {
+        if (error) {
+            console.error(`exec error: ${error}`);
+            reject (error);
+        }
+        current.monitor.openplayer = false
+        channels.closeStreaming_request = true
+        console.log('-----info-----');
+        console.log(channels);
+        console.log('----------');
+        console.log(`VLC - closed`);
+        resolve('success closing vlc')
+      });
+    })
+  }
+  async openStreaming(){
+    channels.closeStreaming_request = false
   }
 }
 

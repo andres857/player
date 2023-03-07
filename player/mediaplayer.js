@@ -1,8 +1,10 @@
 const PlayerController = require('media-player-controller');
-const { institutional, current} = require('../streamings')
+const { institutional, current } = require('../streamings')
 const {currentDate} = require('../date')
 const { doPublish } = require('../broker/publication');
 const mediaPlayer = require('../player/info') 
+const { channels } = require('../config')
+
 
 const device = new mediaPlayer()
 const player = new PlayerController({
@@ -42,7 +44,8 @@ player.on('app-exit', async (code) => {
         let payload = JSON.stringify(current)
         await doPublish(payload)
         device.reboot()
-    }else{
+    }
+    else{
         launchMediaPlayer()
     }
 });
@@ -52,10 +55,12 @@ player.on('app-exit', async (code) => {
 function launchMediaPlayer(){
     current.name = institutional.name
     current.url = institutional.url
-    player.launch( function(){
-        current.monitor.openplayer= true
-        console.log(`[ MEDIAPLAYER - LAUNCH - parametros iniciales del streaming ]`);
-    });
+    if ( !channels.closeStreaming_request ){
+        player.launch( function(){
+            current.monitor.openplayer = true
+            console.log(`[ MEDIAPLAYER - LAUNCH - parametros iniciales del streaming ]`);
+        });
+    }
 }
 
 function changeVolume(volume, cb){
@@ -69,7 +74,7 @@ function newStreaming(name, url, volume){
         console.log(`[ MEDIA PLAYER - EVENT - LOAD - ${currentDate()} ]`);
         current.name = name
         current.url = url
-        player.setVolume(volume,()=>{
+        player.setVolume( volume,()=>{
             console.log(` level volumen = ${volume} `);
         })
     })
