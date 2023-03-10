@@ -15,7 +15,7 @@ async function playerIsRunning(time_pos){
             console.log(`[ MONITOR [DEBUG] - Player running streaming - ${currentDate()} ]`);
             console.log('-----------------------------------------------------------');
         }
-        console.log(`[ MONITOR - Player running streaming - ${currentDate()} ]`);
+        // console.log(`[ MONITOR - Player running streaming - ${currentDate()} ]`);
         streamings.current.monitor.previous_time_pos = time_pos
         streamings.current.monitor.streaming_stop = 0
         streamings.current.broadcast = true
