@@ -1,11 +1,13 @@
 import streamings from "../streamings.js"
-import {player} from "./mediaplayer.js"
+import { player, launchMediaPlayer } from "./mediaplayer.js"
 import {currentDate} from "../date.js"
 import {debug} from "../config.js"
 import { channels } from "../config.js"
+import Device from "./info.js"
 
+const mediaplayer = new Device();
 
-function playerIsRunning(time_pos){
+async function playerIsRunning(time_pos){
     if (time_pos > streamings.current.monitor.previous_time_pos){
         if (debug === 'true'){
             console.log('-----------------------------------------------------------');
@@ -17,7 +19,6 @@ function playerIsRunning(time_pos){
         streamings.current.monitor.previous_time_pos = time_pos
         streamings.current.monitor.streaming_stop = 0
         streamings.current.broadcast = true
-        streamings.current.monitor.openplayer = true
     }else if(time_pos <= streamings.current.monitor.previous_time_pos){
         if (debug === 'true') {
             console.log('-----------------------------------------------------------');
@@ -28,15 +29,20 @@ function playerIsRunning(time_pos){
         console.log(`[ MONITOR - Player stop streaming - ${currentDate()}]`);
         streamings.current.monitor.streaming_stop = streamings.current.monitor.streaming_stop + 1
         streamings.current.broadcast = false
-
-        if ((streamings.current.monitor.streaming_stop >= streamings.current.monitor.limits.streaming_stop) && streamings.current.monitor.openplayer){
-            player.quit( e => {
-                if(e){
-                    console.error(`[ MONITOR - Error closing media player ${e.message} - ${currentDate()}] `);
-                }else{
-                    console.log(`[ MONITOR - Closing media player ]`);
-                }
-            })
+        const vlcisRunning = await mediaplayer.isRunning()
+        if ( !vlcisRunning ){
+            console.log(`[ MONITOR - VLC is closed ]`);
+            launchMediaPlayer()
+        }else{
+            if (streamings.current.monitor.streaming_stop >= streamings.current.monitor.limits.streaming_stop){
+                player.quit( e => {
+                    if(e){
+                        console.error(`[ MONITOR - Error closing media player ${e.message} - ${currentDate()}] `);
+                    }else{
+                        console.log(`[ MONITOR - Closing media player ]`);
+                    }
+                })
+            }
         }
     }
 }

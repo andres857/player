@@ -1,4 +1,5 @@
 import Wifi from "rpi-wifi-connection"
+import psList from 'ps-list';
 import { exec } from "child_process"
 import si from "systeminformation"
 import os from "os"
@@ -13,6 +14,12 @@ export default class Device {
 
   system (){
     return systemInfo
+  }
+
+  async isRunning() {
+    const processes = await psList();
+    const vlcProcess = processes.find( process => process.name === 'vlc' );
+    return !!vlcProcess;
   }
   
   async status() {
@@ -130,12 +137,7 @@ export default class Device {
             console.error(`exec error: ${error}`);
             reject (error);
         }
-        streamings.current.monitor.openplayer = false
         channels.closeStreaming_request = true
-        console.log('-----info-----');
-        console.log(channels);
-        console.log('----------');
-        console.log(`VLC - closed`);
         resolve('success closing vlc')
       });
     })

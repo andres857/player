@@ -25,7 +25,6 @@ player.on('playback-started',  async () => {
     console.log(`[ MEDIA PLAYER - EVENT - PLAYBACK - EL STREAMING A COMENZADO ]`);
     streamings.current.monitor.count_closed_mediaplayer = 0
     streamings.current.broadcast = true
-    streamings.current.monitor.openplayer= true
     streamings.current.monitor.previous_time_pos = streamings.current.monitor.time_pos
     console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ streamings.current.name } - ${ streamings.current.url } - ${currentDate()} ]`)
     let payload = JSON.stringify(streamings.current)
@@ -38,7 +37,6 @@ player.on('app-exit', async (code) => {
     console.log(`[ MEDIA PLAYER - EVENT CLOSED - ${currentDate()} - exit code: ${code}]`);
     if( streamings.current.monitor.count_closed_mediaplayer >= streamings.current.monitor.limits.closed_mediaplayer){
         console.log(`[ MEDIA PLAYER - Player closed: Problem with streaming, closed too many times, restart device - ${currentDate()}]`);
-        streamings.current.monitor.openplayer= false
         streamings.current.broadcast = false
         streamings.current.message = '[ MEDIA PLAYER - Player closed: Problem with streaming, closed too many times, restart device ]'
         let payload = JSON.stringify(streamings.current)
@@ -57,7 +55,6 @@ function launchMediaPlayer(){
     streamings.current.url = streamings.institutional.url
     if ( !channels.closeStreaming_request ){
         player.launch( function(){
-            streamings.current.monitor.openplayer = true
             console.log(`[ MEDIAPLAYER - LAUNCH - parametros iniciales del streaming ]`);
         });
     }

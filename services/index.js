@@ -7,8 +7,9 @@ export default class handleServices{
      this.mediaPlayer = new Device()
   }
 
-  newStreamingReceived(name, url, volumen, duration){
-    if (!streamings.current.monitor.openplayer){
+  async newStreamingReceived(name, url, volumen, duration){
+    const vlcisrunning = await this.mediaPlayer.isRunning()
+    if (!vlcisrunning){
         launchMediaPlayer(name,url,volumen,duration)
     }else{
         newStreaming(name,url,volumen,duration)
