@@ -1,6 +1,7 @@
-const io = require('socket.io-client');
+import io from "socket.io-client"
+import Device from "../player/info"
+
 const socket = io('http://104.131.10.75:3004');
-const Device = require('../player/info')
 
 const mediaPlayer = new Device()
 

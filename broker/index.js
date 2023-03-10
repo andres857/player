@@ -1,5 +1,5 @@
-const MQTT = require("async-mqtt");
-const {connection_broker} = require("../config")
+import MQTT from "async-mqtt";
+import { connection_broker } from "../config.js"
 
 let client = null
 
@@ -24,6 +24,4 @@ async function connectBroker(serial) {
     }
 }
 
-module.exports = {
-  connectBroker
-}
+export default connectBroker;

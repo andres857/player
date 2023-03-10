@@ -1,4 +1,4 @@
-const { customer } = require('../config')
+import { customer } from "../config.js"
 
 async function buildTopics(serial){
   return {
@@ -12,6 +12,6 @@ async function buildTopics(serial){
   }
 }
 
-module.exports={
-  buildTopics,
+export {
+  buildTopics
 }

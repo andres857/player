@@ -1,9 +1,10 @@
-const os = require("os");
-const fs = require('fs/promises');
-const Device = require('./player/info')
-const { currentDateForStats } = require('./date')
-const streamings = require('./streamings')
-const { playerIsRunning } = require('./player/monitor')
+import os from "os"
+import fs from "fs/promises"
+import Device from "./player/info.js"
+import { currentDateForStats } from "./date.js"
+import streamings from "./streamings.js"
+import { playerIsRunning } from "./player/monitor.js"
+
 const running = true
 
 const player = new Device()
@@ -49,6 +50,6 @@ async function loopStatus(){
   }
 }
 
-module.exports = {
+export {
   loopStatus
 }

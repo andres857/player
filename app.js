@@ -1,13 +1,13 @@
 #!/usr/bin/node
-const { current } = require('./streamings')
-const { launchMediaPlayer } = require('./player/mediaplayer')
-const { buildTopics } = require('./broker/topics')
-const { connectBroker } = require('./broker/')
-const { doSubscriber, receiverMessages } = require('./broker/subscriber')
-const Device = require('./player/info')
+import { launchMediaPlayer } from "./player/mediaplayer.js"
+import { buildTopics } from "./broker/topics.js"
+import connectBroker from "./broker/index.js"
+import { doSubscriber, receiverMessages } from "./broker/subscriber.js"
+import { monitoringStreaming } from "./player/monitor.js"
+import { loopStatus } from "./stats.js"
 
-require('./player/monitor').monitoringStreaming()
-require('./stats').loopStatus()
+import Device from "./player/info.js"
+
 
 const player = new Device()
 
@@ -25,6 +25,8 @@ async function main(){
         }).catch((e)=>{
             console.log(e);
         })
+        await monitoringStreaming()
+        await loopStatus()
     } catch (error) {
         console.log(error);
     }

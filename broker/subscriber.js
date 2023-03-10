@@ -1,12 +1,9 @@
-const {newStreaming} =require('../player/mediaplayer')
-const {currentDate} = require('../date')
-const {current} = require('../streamings')
-const handleService = require('../services/index')
-const { doPublish } = require('../broker/publication')
+import handleService from "../services/index.js"
+import { doPublish } from "../broker/publication.js"
 
 const service = new handleService()
 
-async function doSubscriber(client,topics){
+async function doSubscriber( client,topics ){
     try {
         for (let topic in topics) {
             await client.subscribe(topics[topic])
@@ -34,7 +31,7 @@ async function receiverMessages(client,topics_subscriber){
     })
 }
 
-module.exports={
+export {
     doSubscriber,
     receiverMessages
 }

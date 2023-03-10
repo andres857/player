@@ -1,6 +1,6 @@
-const { channels } = require('./config')
+import { channels } from "./config.js"
 
-streamings = {
+export default {
   // channel by default
   institutional : {
     url: channels.institucional,
@@ -40,5 +40,3 @@ streamings = {
     }
   } 
 }
-
-module.exports = streamings

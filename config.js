@@ -1,4 +1,5 @@
-require('dotenv').config({ path: '~/player/.env'})
+import dotenv from 'dotenv'
+dotenv.config({ path: '~/player/.env' });
 
 const connection_broker = {
     server : process.env.SERVER_BROKER,
@@ -24,7 +25,7 @@ const systemInfo = {
 
 const debug = process.env.DEBUG || 'false'
 
-module.exports ={
+export {
     connection_broker,
     channels,
     customer,

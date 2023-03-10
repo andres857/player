@@ -1,14 +1,14 @@
-const {newStreaming, launchMediaPlayer} =require('../player/mediaplayer')
-const {current} = require('../streamings')
-const Device = require('../player/info');
+import { newStreaming, launchMediaPlayer } from "../player/mediaplayer.js"
+import streamings from "../streamings.js"
+import Device from "../player/info.js"
 
-class handleServices{
+export default class handleServices{
   constructor(){
      this.mediaPlayer = new Device()
   }
 
   newStreamingReceived(name, url, volumen, duration){
-    if (!current.monitor.openplayer){
+    if (!streamings.current.monitor.openplayer){
         launchMediaPlayer(name,url,volumen,duration)
     }else{
         newStreaming(name,url,volumen,duration)
@@ -51,5 +51,3 @@ class handleServices{
     }
   }
 }
-
-module.exports = handleServices

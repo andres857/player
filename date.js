@@ -1,4 +1,4 @@
-const moment = require('moment'); // require
+import moment from "moment"
 
 function currentDate(){
  return moment( new Date() ).format("DD/MM/YYYY HH:mm:ss")
@@ -10,7 +10,7 @@ function currentDateForStats(){
     return day + "," + hour
    }
 
-module.exports = {
+export {
     currentDate,
     currentDateForStats
 }

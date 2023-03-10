@@ -1,11 +1,8 @@
-const { connectBroker } = require('./index')
-const { buildTopics } = require('../broker/topics')
-const {currentDate} = require('../date')
-const { current } = require('../streamings')
-const Device = require('../player/info')
+import connectBroker from "./index.js"
+import { buildTopics } from "../broker/topics.js"
+import Device from "../player/info.js"
 
-
-const player = new Device()
+const player = new Device();
 
 async function getParams(){
     const client = await connectBroker()
@@ -19,8 +16,6 @@ async function doPublish(msg){
     await client.publish(publish.response, msg)
 }
 
-
-
-module.exports = {
+export {
     doPublish,
 }

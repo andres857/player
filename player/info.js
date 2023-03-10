@@ -1,12 +1,12 @@
-const { exec } = require('child_process');
-const si = require('systeminformation')
-const os = require('os')
-const { systemInfo, channels } = require('../config')
-const Wifi = require('rpi-wifi-connection');
-const fs = require('fs');
-const {current} = require('../streamings')
+import Wifi from "rpi-wifi-connection"
+import { exec } from "child_process"
+import si from "systeminformation"
+import os from "os"
+import fs from "fs"
+import { systemInfo, channels } from "../config.js"
+import streamings from "../streamings.js"
 
-class Device {
+export default class Device {
   constructor(){
     this.wifiNetworks = new Wifi()
   }
@@ -130,7 +130,7 @@ class Device {
             console.error(`exec error: ${error}`);
             reject (error);
         }
-        current.monitor.openplayer = false
+        streamings.current.monitor.openplayer = false
         channels.closeStreaming_request = true
         console.log('-----info-----');
         console.log(channels);
@@ -145,4 +145,4 @@ class Device {
   }
 }
 
-module.exports = Device
+
