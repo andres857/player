@@ -5,11 +5,16 @@ import si from "systeminformation"
 import os from "os"
 import fs from "fs"
 import { systemInfo, channels } from "../config.js"
-import streamings from "../streamings.js"
 
 export default class Device {
   constructor(){
     this.wifiNetworks = new Wifi()
+    if (Device.instance){
+      console.log('Devolviendo la instancia creada anteriormente');
+      return Device.instance
+    }
+    console.log('creando una nueva instancia');
+    Device.instance = this
   }
 
   system (){
@@ -142,6 +147,7 @@ export default class Device {
       });
     })
   }
+
   async openStreaming(){
     channels.closeStreaming_request = false
   }
