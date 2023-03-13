@@ -17,7 +17,7 @@ export default class handleServices{
     return `new streaming ${name}`
   }
 
-  handleRequest(payload){
+  async handleRequest(payload){
     switch (payload) {
       case 'interfaces':
         return this.mediaPlayer.interfaces();
@@ -32,7 +32,7 @@ export default class handleServices{
       case 'restart':
         return this.mediaPlayer.reboot();
       case 'screenshot':
-        return this.mediaPlayer.screenshot();
+        return  await this.mediaPlayer.screenshot();
       case 'closeStreaming':
         return this.mediaPlayer.closeStreaming();
       case 'openStreaming':

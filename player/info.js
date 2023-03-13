@@ -9,12 +9,12 @@ import { systemInfo, channels } from "../config.js"
 export default class Device {
   constructor(){
     this.wifiNetworks = new Wifi()
+    this.pathScreenshot = `/home/${systemInfo.username}/player/screenshot.png`
     if (Device.instance){
-      console.log('Devolviendo la instancia creada anteriormente');
       return Device.instance
     }
-    console.log('creando una nueva instancia');
     Device.instance = this
+
   }
 
   system (){
@@ -119,16 +119,17 @@ export default class Device {
   }
 
   async screenshot() {
-    if(fs.existsSync('screenshot.png')) {
-      fs.unlinkSync('screenshot.png');
+    if(fs.existsSync(this.pathScreenshot)) {
+      fs.unlinkSync(this.pathScreenshot);
     }
 
     return new Promise((resolve, reject)=>{
-      exec('scrot -u -f screenshot.png', (error, stdout, stderr) => {
+      exec(`scrot -u -f ${this.pathScreenshot}`, (error, stdout, stderr) => {
         if (error) {
             console.error(`exec error: ${error}`);
             reject (error);
         }
+        console.log(stdout, stderr);
         console.log(`Screenshot taken and saved`);
         resolve('success')
       });
