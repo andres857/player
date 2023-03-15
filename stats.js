@@ -1,20 +1,21 @@
 import os from "os"
 import fs from "fs/promises"
-import Device from "./player/info.js"
+import { Device } from "./player/index.js"
 import { currentDateForStats } from "./date.js"
 import streamings from "./streamings.js"
 import { playerIsRunning } from "./player/monitor.js"
 
 const running = true
 
-const player = new Device()
+const device = new Device()
+
 async function writeStatusPlayer() {
   try {
-    const content = await player.status();
-    const connectionType = await player.connectionTypeUse();
+    const content = await device.status();
+    const connectionType = await device.connectionTypeUse();
     let strenghtWifi = 'n/a'
     if (connectionType === "wlan0") {
-      strenghtWifi = await player.strenghtWifiSignal();
+      strenghtWifi = await device.strenghtWifiSignal();
     }
 
     const { current } = streamings
@@ -27,7 +28,7 @@ async function writeStatusPlayer() {
     const arrContent = Object.values(content)
     const arrStreaming = Object.values(channel)
     playerIsRunning(streamings.current.monitor.time_pos)
-    let { username } = player.system()
+    let { username } = device.system()
     let datestats = currentDateForStats() 
     await fs.writeFile(`/home/${username}/player/status.log`, datestats + "," + arrContent + "," + connectionType + "," + strenghtWifi + "," + arrStreaming + os.EOL , { flag: 'a+' } );
   } catch (err) {

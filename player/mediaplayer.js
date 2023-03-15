@@ -1,13 +1,11 @@
-import PlayerController from "media-player-controller"
 import streamings from "../streamings.js"
 import { currentDate } from "../date.js"
 import { doPublish } from "../broker/publication.js"
-import Device from "../player/info.js"
+import { MediaPlayer, Device } from "../player/index.js"
 import { channels } from "../config.js"
 
-
 const device = new Device()
-const player = new PlayerController({
+const mediaPlayer = new MediaPlayer({
     app: 'vlc',
     args: ['--fullscreen', '--no-video-title-show','--video-on-top'],//
     media: streamings.institutional.url,
@@ -16,22 +14,22 @@ const player = new PlayerController({
 
 //   ----- events of player media -----
 // Data object with current playback event 
-player.on('playback', (data)=>{
+mediaPlayer.on('playback', (data)=>{
     streamings.current.monitor.time_pos = data.value    
 });
 
 // Playback started and player can now be controlled
-player.on('playback-started',  async () => {
+mediaPlayer.on('playback-started',  async () => {
     console.log(`[ MEDIA PLAYER - EVENT - PLAYBACK - EL STREAMING A COMENZADO ]`);
     streamings.current.monitor.count_closed_mediaplayer = 0
     streamings.current.broadcast = true
     streamings.current.monitor.previous_time_pos = streamings.current.monitor.time_pos
-    console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ streamings.current.name } - ${ streamings.current.url } - ${currentDate()} ]`)
-    let payload = JSON.stringify(streamings.current)
-    await doPublish(payload)    
+    console.log(`[ MEDIA PLAYER - Reproductor en emision de ${ streamings.current.name } - ${ streamings.current.url } - ${ currentDate() } ]`)
+    let payload = JSON.stringify( streamings.current )
+    await doPublish( payload )    
 });
 
-player.on('app-exit', async (code) => {
+mediaPlayer.on('app-exit', async (code) => {
     streamings.current.monitor.count_closed_mediaplayer = streamings.current.monitor.count_closed_mediaplayer + 1
     streamings.current.monitor.streaming_stop = 0
     console.log(`[ MEDIA PLAYER - EVENT CLOSED - ${currentDate()} - exit code: ${code}]`);
@@ -53,33 +51,16 @@ player.on('app-exit', async (code) => {
 function launchMediaPlayer(){
     streamings.current.name = streamings.institutional.name
     streamings.current.url = streamings.institutional.url
-    if ( !channels.closeStreaming_request ){
-        player.launch( function(){
-            console.log(`[ MEDIAPLAYER - LAUNCH - parametros iniciales del streaming ]`);
-        });
-    }
-}
-
-function changeVolume(volume, cb){
-    player.setVolume(volume)
-    cb()
-}
-
-// Change the streaming and update object streaming
-function newStreaming(name, url, volume){
-    player.load( url, ()=>{
-        console.log(`[ MEDIA PLAYER - EVENT - LOAD - ${currentDate()} ]`);
-        streamings.current.name = name
-        streamings.current.url = url
-        player.setVolume( volume,()=>{
-            console.log(` level volumen = ${volume} `);
-        })
+    return new Promise((resolve, reject)=>{
+        if ( !channels.closeStreaming_request ){
+            mediaPlayer.launch( function(){
+                console.log(`[ MEDIAPLAYER - LAUNCH - parametros iniciales del streaming ]`);
+                resolve('[ MEDIAPLAYER - LAUNCH - Reproductor de video lanzado ]')
+            });
+        }
     })
 }
 
 export {
-    launchMediaPlayer,
-    changeVolume,
-    newStreaming,
-    player,
+    launchMediaPlayer
 }

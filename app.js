@@ -5,14 +5,14 @@ import connectBroker from "./broker/index.js"
 import { doSubscriber, receiverMessages } from "./broker/subscriber.js"
 import { monitoringStreaming } from "./player/monitor.js"
 import { loopStatus } from "./stats.js"
-import Device from "./player/info.js"
+import { Device } from "./player/index.js"
 
-const player = new Device()
+const device = new Device()
 
 async function main(){
     try {
-        const serial = await player.getSerial()
-        launchMediaPlayer()
+        const serial = await device.getSerial()
+        await launchMediaPlayer()
         const {suscriber} = await buildTopics(serial)
         const client = await connectBroker(serial)
          
@@ -29,4 +29,5 @@ async function main(){
         console.log(error);
     }
 }
+
 main()

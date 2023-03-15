@@ -1,54 +1,44 @@
-import { newStreaming, launchMediaPlayer } from "../player/mediaplayer.js"
+import { launchMediaPlayer } from "../player/mediaplayer.js"
 import streamings from "../streamings.js"
-import Device from "../player/info.js"
+import { Device, MediaPlayer } from "../player/index.js"
 
 export default class handleServices{
   constructor(){
-     this.mediaPlayer = new Device()
-  }
-
-  async newStreamingReceived(name, url, volumen, duration){
-    const vlcisrunning = await this.mediaPlayer.isRunning()
-    if (!vlcisrunning){
-        launchMediaPlayer(name,url,volumen,duration)
-    }else{
-        newStreaming(name,url,volumen,duration)
-    }
-    return `new streaming ${name}`
+     this.device = new Device()
+     this.mediaPlayer = new MediaPlayer()
   }
 
   async handleRequest(payload){
     switch (payload) {
       case 'interfaces':
-        return this.mediaPlayer.interfaces();
+        return this.device.interfaces();
       case 'status':
-        return this.mediaPlayer.status();
+        return this.device.status();
       case 'info':
-        return this.mediaPlayer.info();
+        return this.device.info();
       case 'nodeversion':
-        return this.mediaPlayer.nodeversion();
+        return this.device.nodeversion();
       case 'serial':
-        return this.mediaPlayer.getSerial();
+        return this.device.getSerial();
       case 'restart':
-        return this.mediaPlayer.reboot();
+        return this.device.reboot();
       case 'screenshot':
-        return  await this.mediaPlayer.screenshot();
+        return await this.mediaPlayer.screenshot();
       case 'closeStreaming':
         return this.mediaPlayer.closeStreaming();
       case 'openStreaming':
         return this.mediaPlayer.openStreaming();
+      case 'muteStreaming':
+        return this.mediaPlayer.setVolume(0);
+      case 'unMuteStreaming':
+        return this.mediaPlayer.setVolume(1);
       default:
-        return 'Nada para hacer'
+        return 'Peticion no Valida'
     }
   }
 
   async handle(action) {
-    if ( !action.request.newstreaming ){
-      let payload = action.request
-      return await this.handleRequest( payload )
-    }else{
-      let { name, url, volumen, duration } = action.request.newstreaming
-      return this.newStreamingReceived( name, url, volumen, duration )    
-    }
+    let payload = action.request
+    return await this.handleRequest( payload )
   }
 }

@@ -1,11 +1,11 @@
 import streamings from "../streamings.js"
-import { player, launchMediaPlayer } from "./mediaplayer.js"
+import { launchMediaPlayer } from "./mediaplayer.js"
 import {currentDate} from "../date.js"
-import {debug} from "../config.js"
+import { debug } from "../config.js"
 import { channels } from "../config.js"
-import Device from "./info.js"
+import { MediaPlayer } from "./index.js"
 
-const mediaplayer = new Device();
+const mediaPlayer = new MediaPlayer();
 
 async function playerIsRunning(time_pos){
     if (time_pos > streamings.current.monitor.previous_time_pos){
@@ -29,13 +29,13 @@ async function playerIsRunning(time_pos){
         console.log(`[ MONITOR - Player stop streaming - ${currentDate()}]`);
         streamings.current.monitor.streaming_stop = streamings.current.monitor.streaming_stop + 1
         streamings.current.broadcast = false
-        const vlcisRunning = await mediaplayer.isRunning()
+        const vlcisRunning = await mediaPlayer.playerIsRunning()
         if ( !vlcisRunning ){
             console.log(`[ MONITOR - VLC is closed ]`);
             launchMediaPlayer()
         }else{
             if (streamings.current.monitor.streaming_stop >= streamings.current.monitor.limits.streaming_stop){
-                player.quit( e => {
+                mediaPlayer.quit( e => {
                     if(e){
                         console.error(`[ MONITOR - Error closing media player ${e.message} - ${currentDate()}] `);
                     }else{
@@ -54,7 +54,7 @@ function monitoringStreaming(){
         }else{
             console.log(`[ MONITOR - Closing media player from request web ]`);
         }
-    }, 10000);
+    }, 5000);
 }
 
 export {
