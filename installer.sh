@@ -89,14 +89,14 @@ start_spinner '- 📥 Obteniendo y configurando el acceso ssh'
     echo "key found"
     else
     # Si no existe, mostrar otro mensaje
-    wget -O /home/$user/.ssh/authorized_keys https://assets-players.sfo3.digitaloceanspaces.com/key_public_players/id_rsa.pub
+    wget -O /home/$user/.ssh/authorized_keys https://mediaplayer.nyc3.digitaloceanspaces.com/mediaplayer_rsa.pub
     fi
 stop_spinner $?
 
 start_spinner '- 📔 Actualizando el sistema y Instalando Dependencias'
     sudo apt update -yq
     sudo apt upgrade -yq  
-    sudo apt install unclutter imagemagick -yq 
+    sudo apt install unclutter imagemagick curl git openssh-server -yq 
     sudo apt install raspberrypi-kernel-headers -yq
     sudo apt autoremove -yqs
 stop_spinner $?
@@ -142,7 +142,7 @@ start_spinner '- 📥 Configurando el reinicio programado y la tarea de inicio d
       echo "[Desktop Entry]
   Type=Application
   Name=mediaplayer
-  Exec=/usr/bin/bash /home/$user/player/run_on_boot.sh" > /home/$user/.config/autostart/mediaplayer.desktop
+  Exec=/bin/bash /home/$user/player/run_on_boot.sh" > /home/$user/.config/autostart/mediaplayer.desktop
   chown $user: -R "/home/$user/.config/autostart"
 stop_spinner $?
 
