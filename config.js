@@ -15,15 +15,15 @@ const channels = {
 }
 
 const customer = {
-    name: process.env.CLIENT
+    name: process.env.CLIENT,
 }
 
 const systemInfo = {
-    username: process.env.USERNAME || null,
+    username: process.env.USERNAME || 'mediaplayer',
     ssid: process.env.SSID_WIFI || null,
 }
 
-const debug = process.env.DEBUG || 'false'
+const debug = process.env.DEBUG || 'false';
 
 export {
     connection_broker,

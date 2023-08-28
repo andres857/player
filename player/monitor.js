@@ -1,9 +1,8 @@
-import streamings from "../streamings.js"
-import { launchMediaPlayer } from "./mediaplayer.js"
-import {currentDate} from "../date.js"
-import { debug } from "../config.js"
-import { channels } from "../config.js"
-import { MediaPlayer } from "./index.js"
+import streamings from "../streamings.js";
+import { launchMediaPlayer } from "./mediaplayer.js";
+import { currentDate } from "../date.js";
+import { debug, channels } from "../config.js";
+import { MediaPlayer } from "./index.js";
 
 const mediaPlayer = new MediaPlayer();
 
@@ -25,7 +24,7 @@ async function playerIsRunning(time_pos){
             console.log(`previous_time_pos ${streamings.current.monitor.previous_time_pos} --- time_pos: ${time_pos}`);
             console.log(`[ MONITOR [DEBUG] - Player stop streaming - ${currentDate()}]`);
             console.log('-----------------------------------------------------------');
-        }
+        }1
         console.log(`[ MONITOR - Player stop streaming - ${currentDate()}]`);
         streamings.current.monitor.streaming_stop = streamings.current.monitor.streaming_stop + 1
         streamings.current.broadcast = false

@@ -1,33 +1,31 @@
-import { launchMediaPlayer } from "../player/mediaplayer.js"
-import streamings from "../streamings.js"
-import { Device, MediaPlayer } from "../player/index.js"
+import { Device, MediaPlayer } from "../player/index.js";
 
 export default class handleServices{
   constructor(){
-     this.device = new Device()
-     this.mediaPlayer = new MediaPlayer()
+     this.device = new Device();
+     this.mediaPlayer = new MediaPlayer();
   }
 
   async handleRequest(payload){
     switch (payload) {
-      case 'interfaces':
-        return this.device.interfaces();
       case 'status':
         return this.device.status();
+      case 'restart':
+        return this.device.reboot();
+      case 'interfaces':
+        return this.device.interfaces();
       case 'info':
         return this.device.info();
       case 'nodeversion':
         return this.device.nodeversion();
       case 'serial':
         return this.device.getSerial();
-      case 'restart':
-        return this.device.reboot();
       case 'screenshot':
         return await this.mediaPlayer.screenshot();
-      case 'closeStreaming':
-        return this.mediaPlayer.closeStreaming();
       case 'openStreaming':
         return this.mediaPlayer.openStreaming();
+      case 'closeStreaming':
+        return this.mediaPlayer.closeStreaming();
       case 'muteStreaming':
         return this.mediaPlayer.setVolume(0);
       case 'unMuteStreaming':
@@ -38,7 +36,8 @@ export default class handleServices{
   }
 
   async handle(action) {
-    let payload = action.request
-    return await this.handleRequest( payload )
+    let payload = action.request;
+    console.log('service',payload);
+    return await this.handleRequest( payload );
   }
 }

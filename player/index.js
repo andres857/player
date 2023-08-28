@@ -1,20 +1,20 @@
-import Wifi from "rpi-wifi-connection"
+import Wifi from "rpi-wifi-connection";
 import psList from 'ps-list';
-import { exec } from "child_process"
-import si from "systeminformation"
-import os from "os"
-import fs from "fs"
-import { systemInfo, channels } from "../config.js"
+import { exec } from "child_process";
+import si from "systeminformation";
+import os from "os";
+import fs from "fs";
+import { systemInfo, channels } from "../config.js";
 import PlayerController from "media-player-controller";
 
 class MediaPlayer extends PlayerController{
     constructor(options){
-      super(options)
-      this.pathScreenshot = `/home/${systemInfo.username}/player/screenshot.png`
+      super(options);
+      this.pathScreenshot = `/home/${systemInfo.username}/player/screenshot.png`;
       if (MediaPlayer.instance){
-        return MediaPlayer.instance
+        return MediaPlayer.instance;
       }
-      MediaPlayer.instance = this
+      MediaPlayer.instance = this;
     }
 
     async playerIsRunning() {
@@ -30,71 +30,73 @@ class MediaPlayer extends PlayerController{
               console.error(`exec error: ${error}`);
               reject (error);
           }
-          channels.closeStreaming_request = true
-          resolve('success closing vlc')
+          channels.closeStreaming_request = true;
+          resolve('success closing vlc');
         });
       })
     }
     
     async openStreaming(){
-      channels.closeStreaming_request = false
+      channels.closeStreaming_request = false;
     }
-
-    async screenshot() {
-      if(fs.existsSync(this.pathScreenshot)) {
-        fs.unlinkSync(this.pathScreenshot);
-      }
-  
-      return new Promise((resolve, reject)=>{
-        exec(`scrot -u -f ${this.pathScreenshot}`, (error, stdout, stderr) => {
-          if (error) {
-              console.error(`exec error: ${error}`);
-              reject (error);
-          }
-          console.log(stdout, stderr);
-          console.log(`Screenshot taken and saved`);
-          resolve('success')
-        });
-      })
-    }
+    
+        async screenshot() {
+            if(fs.existsSync(this.pathScreenshot)) {
+                fs.unlinkSync(this.pathScreenshot);
+            }
+            
+            return new Promise((resolve, reject) => {
+                const cmd = `ffmpeg -f x11grab -s 1280x720 -i :0.0 -vframes 1 ${this.pathScreenshot}`;
+                
+                exec(cmd, (error, stdout, stderr) => {
+                    if (error) {
+                        console.error(`exec error: ${error}`);
+                        reject(error);
+                        return;
+                    }
+                    console.log(stdout, stderr);
+                    console.log(`Screenshot taken and saved`);
+                    resolve('success');
+                });
+            });
+        }
 }
 
 class Device {
     constructor(){
-        this.wifiNetworks = new Wifi()
-        this.pathScreenshot = `/home/${systemInfo.username}/player/screenshot.png`
+        this.wifiNetworks = new Wifi();
         if (Device.instance){
-          return Device.instance
+          return Device.instance;
         }
-        Device.instance = this
+        Device.instance = this;
     }
 
     async status() {
         try {
-          let { currentLoad } = await si.currentLoad()
-          let { main } = await si.cpuTemperature()
+          let { currentLoad } = await si.currentLoad();
+          let { main } = await si.cpuTemperature();
           let data = {
             temperature: main.toString(),
             load: currentLoad.toFixed(2),
           } 
-          return data
+          return data;
         } catch (e) {
           console.log(`[ PLAYER System - Error obteniendo el status del player ]`);
         }
     }
 
     async getSerial(){
-        const {serial} = await si.system()
-        return serial.substring(serial.length -8)
+        const {serial} = await si.system();
+        return serial.substring(serial.length -8);
     }
 
     system (){
-        return systemInfo
+        return systemInfo;
     }
 
     async info(){
         try {
-          return await si.osInfo()
+          return await si.osInfo();
         } catch (error) {
           console.log(`[ INFO PLAYER - error obteniendo la info del player - ${error}]`);
         }
@@ -105,7 +107,7 @@ class Device {
     }
 
     async interfaces(){
-        return await os.networkInterfaces()
+        return await os.networkInterfaces();
     }
 
     async connectionTypeUse(){
@@ -125,28 +127,28 @@ class Device {
           return connectionType;
         } catch (error) {
           console.log('PLAYER - ERROR OBTENIENDO INFORMACION DE LA RED', error);
-          return 'Network interface not found'
+          return 'Network interface not found';
         }
     }
 
     async isConnectWifi(){
-        const state = await this.wifiNetworks.getState()
-        return state || false
+        const state = await this.wifiNetworks.getState();
+        return state || false;
     }
     
     async statusWifi(){
-        let statewifi = await this.isConnectWifi()
-        if (!statewifi) return false
-        const network = await this.wifiNetworks.getStatus() 
-        return network
+        let statewifi = await this.isConnectWifi();
+        if (!statewifi) return false;
+        const network = await this.wifiNetworks.getStatus();
+        return network;
     }
     
     async strenghtWifiSignal(nameNetwork=systemInfo.ssid){
-        let statewifi = await this.isConnectWifi()
-        if (!statewifi) return false
-        const networksAvailable = await this.wifiNetworks.scan()
-        const myNetwork = networksAvailable.find( netowrk => netowrk.ssid === nameNetwork)
-        return myNetwork.signalLevel 
+        let statewifi = await this.isConnectWifi();
+        if (!statewifi) return false;
+        const networksAvailable = await this.wifiNetworks.scan();
+        const myNetwork = networksAvailable.find( netowrk => netowrk.ssid === nameNetwork);
+        return myNetwork.signalLevel;
     }
 
     reboot(){

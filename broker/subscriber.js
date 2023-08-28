@@ -15,7 +15,7 @@ async function doSubscriber( client,topics ){
     }
 }
 
-async function receiverMessages(client,topics_subscriber){
+async function receiverMessages(client, topics_subscriber){
     client.on('message', async function ( topic, payload ) {
     let message = JSON.parse( payload )
     console.log(`[ Broker - received from topic ${topic} : the message]`, message)
