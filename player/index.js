@@ -24,42 +24,42 @@ class MediaPlayer extends PlayerController{
     }
 
     async closeStreaming(){
-      return new Promise((resolve,reject)=>{
-        exec('killall vlc', (error, stdout, stderr) => {
-          if (error) {
-              console.error(`exec error: ${error}`);
-              reject (error);
-          }
-          channels.closeStreaming_request = true;
-          resolve('success closing vlc');
-        });
-      })
+        return new Promise((resolve,reject)=>{
+          exec('killall vlc', (error, stdout, stderr) => {
+            if (error) {
+                console.error(`exec error: ${error}`);
+                reject (error);
+            }
+            channels.closeStreaming_request = true;
+            resolve('success closing vlc');
+          });
+        })
     }
     
     async openStreaming(){
-      channels.closeStreaming_request = false;
+        channels.closeStreaming_request = false;
     }
     
-        async screenshot() {
-            if(fs.existsSync(this.pathScreenshot)) {
-                fs.unlinkSync(this.pathScreenshot);
-            }
-            
-            return new Promise((resolve, reject) => {
-                const cmd = `ffmpeg -f x11grab -s 1280x720 -i :0.0 -vframes 1 ${this.pathScreenshot}`;
-                
-                exec(cmd, (error, stdout, stderr) => {
-                    if (error) {
-                        console.error(`exec error: ${error}`);
-                        reject(error);
-                        return;
-                    }
-                    console.log(stdout, stderr);
-                    console.log(`Screenshot taken and saved`);
-                    resolve('success');
-                });
-            });
+    async screenshot() {
+        if(fs.existsSync(this.pathScreenshot)) {
+            fs.unlinkSync(this.pathScreenshot);
         }
+        
+        return new Promise((resolve, reject) => {
+            const cmd = `ffmpeg -f x11grab -s 1280x720 -i :0.0 -vframes 1 ${this.pathScreenshot}`;
+            
+            exec(cmd, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`exec error: ${error}`);
+                    reject(error);
+                    return;
+                }
+                console.log(stdout, stderr);
+                console.log(`Screenshot taken and saved`);
+                resolve('success');
+            });
+        });
+    }
 }
 
 class Device {

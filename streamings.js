@@ -34,7 +34,8 @@ export default {
       streaming_stop: 0,
       openplayer: false,
       limits:{
-        streaming_stop: 3,
+        wait_time: 60000 , // time in ms
+        streaming_stop: 3 ,
         closed_mediaplayer: 3
       }
     }

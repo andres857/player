@@ -14,7 +14,6 @@ async function playerIsRunning(time_pos){
             console.log(`[ MONITOR [DEBUG] - Player running streaming - ${currentDate()} ]`);
             console.log('-----------------------------------------------------------');
         }
-        // console.log(`[ MONITOR - Player running streaming - ${currentDate()} ]`);
         streamings.current.monitor.previous_time_pos = time_pos
         streamings.current.monitor.streaming_stop = 0
         streamings.current.broadcast = true
@@ -24,7 +23,7 @@ async function playerIsRunning(time_pos){
             console.log(`previous_time_pos ${streamings.current.monitor.previous_time_pos} --- time_pos: ${time_pos}`);
             console.log(`[ MONITOR [DEBUG] - Player stop streaming - ${currentDate()}]`);
             console.log('-----------------------------------------------------------');
-        }1
+        }
         console.log(`[ MONITOR - Player stop streaming - ${currentDate()}]`);
         streamings.current.monitor.streaming_stop = streamings.current.monitor.streaming_stop + 1
         streamings.current.broadcast = false
@@ -50,10 +49,8 @@ function monitoringStreaming(){
     setInterval(() => {
         if (!channels.closeStreaming_request){
             playerIsRunning(streamings.current.monitor.time_pos)
-        }else{
-            console.log(`[ MONITOR - Closing media player from request web ]`);
         }
-    }, 5000);
+    }, streamings.current.monitor.limits.wait_time);
 }
 
 export {
